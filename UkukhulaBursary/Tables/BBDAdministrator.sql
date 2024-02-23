@@ -1,0 +1,10 @@
+CREATE TABLE [dbo].[BBDAdministrator]
+(
+  [ID] INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+  [UserID] INT NOT NULL
+)
+GO
+
+ALTER TABLE [dbo].[BBDAdministrator]
+ADD CONSTRAINT [FK_BBDAdministratorUserID] FOREIGN KEY([UserID]) REFERENCES [dbo].[User]
+GO

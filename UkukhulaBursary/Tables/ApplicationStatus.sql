@@ -1,0 +1,7 @@
+CREATE TABLE [dbo].[ApplicationStatus]
+(
+  [ID] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+  [Status] VARCHAR(20) NOT NULL
+)
+GO
+

@@ -21,7 +21,7 @@ public class UniversityRepoImpl implements UniversityRepository {
           "uspAddUniversityByName(?)}";
   private static final String GET_UNIVERSITY_BY_ID = "{CALL " +
           "uspGetUniversityById(?)}";
-  private static final String GET_ALL_UNIVERSITIES = "SELECT ID, UniversityName FROM vUniversities";
+  private static final String GET_ALL_UNIVERSITIES = "SELECT ID, UniversityName FROM University";
 
   final JdbcTemplate jdbcTemplate;
 

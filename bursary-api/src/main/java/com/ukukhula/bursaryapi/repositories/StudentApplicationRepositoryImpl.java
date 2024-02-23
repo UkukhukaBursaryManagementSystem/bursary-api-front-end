@@ -22,8 +22,8 @@ public class StudentApplicationRepositoryImpl implements StudentApplicationRepos
                 resultSet.getInt("StudentID"),
                 resultSet.getString("Motivation"),
                 resultSet.getBigDecimal("BursaryAmount"),
-                resultSet.getString("Status"),
-                resultSet.getString("RejectionReason"),
+                resultSet.getString("StatusId"),
+                resultSet.getString("ReviewerComment"),
                 resultSet.getDate("Date"));
     });
 

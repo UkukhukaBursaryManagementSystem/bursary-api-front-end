@@ -17,19 +17,19 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.ukukhula.bursaryapi.assemblers.StudentApplicationAssembler;
 import com.ukukhula.bursaryapi.entities.StudentApplication;
+import com.ukukhula.bursaryapi.repositories.StudentApplicationRepository;
 import com.ukukhula.bursaryapi.exceptions.StudentApplicationException;
 import com.ukukhula.bursaryapi.exceptions.ApplicationInvalidStatusException;
-import com.ukukhula.bursaryapi.services.StudentApplicationService;
 
 @RestController
 @RestControllerAdvice
 
 public class StudentApplicationController {
 
-    private final StudentApplicationService studentApplicationService;
+    private final StudentApplicationRepository studentApplicationService;
     private final StudentApplicationAssembler assembler;
 
-    public StudentApplicationController(StudentApplicationService studentApplicationService,
+    public StudentApplicationController(StudentApplicationRepository studentApplicationService,
             StudentApplicationAssembler assembler) {
         this.studentApplicationService = studentApplicationService;
         this.assembler = assembler;

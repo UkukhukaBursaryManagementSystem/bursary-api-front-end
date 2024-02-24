@@ -23,7 +23,7 @@ FROM
     FROM 
         [dbo].[User] AS userAlias
     JOIN 
-        Student AS studentAlias ON studentAlias.UserID = u.ID) AS userAlias
+        Student AS studentAlias ON studentAlias.UserID = userAlias.ID) AS userAlias
 JOIN 
     (SELECT 
         genderAlias.[Identity],
@@ -58,6 +58,6 @@ JOIN
         contactAlias.Email, 
         userAlias.ContactID AS UserContactID
     FROM 
-        Contact AS co
+        Contact AS contactAlias
     JOIN 
         [dbo].[User] AS userAlias ON userAlias.ContactID = contactAlias.ID) AS contactAlias ON userAlias.ContactID = contactAlias.UserContactID;

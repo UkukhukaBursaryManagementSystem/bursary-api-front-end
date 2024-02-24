@@ -5,16 +5,17 @@ import lombok.Data;
 @Data
 public class UniversityApplication {
     private int id;
-    private int universityId;
+    private String universityName;
     private String motivation;
-    private String statusId;
+    private String applicationStatus;
     private String reviewerComment;
 
-    public UniversityApplication(int id, int universityId, String motivation, String statusId, String reviewerComment) {
+    public UniversityApplication(int id, String universityName, String motivation, String applicationStatus,
+            String reviewerComment) {
         this.id = id;
-        this.universityId = universityId;
+        this.universityName = universityName;
         this.motivation = motivation;
-        this.statusId = statusId;
+        this.applicationStatus = applicationStatus;
         this.reviewerComment = reviewerComment;
     }
 }

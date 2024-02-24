@@ -26,12 +26,12 @@ import com.ukukhula.bursaryapi.exceptions.ApplicationInvalidStatusException;
 
 public class StudentApplicationController {
 
-    private final StudentApplicationRepository studentApplicationService;
+    private final StudentApplicationRepository studentAplicationRepository;
     private final StudentApplicationAssembler assembler;
 
-    public StudentApplicationController(StudentApplicationRepository studentApplicationService,
+    public StudentApplicationController(StudentApplicationRepository studentAplicationRepository,
             StudentApplicationAssembler assembler) {
-        this.studentApplicationService = studentApplicationService;
+        this.studentAplicationRepository = studentAplicationRepository;
         this.assembler = assembler;
     }
 
@@ -41,7 +41,7 @@ public class StudentApplicationController {
         if (studentId <= 0) {
             return ResponseEntity.badRequest().body("Student ID is not provided");
         }
-        StudentApplication application = studentApplicationService.findByStudentID(studentId);
+        StudentApplication application = studentAplicationRepository.findByStudentID(studentId);
 
         if (application == null) {
             return ResponseEntity.notFound().build();
@@ -54,7 +54,7 @@ public class StudentApplicationController {
 
     @GetMapping("/students")
     public CollectionModel<EntityModel<StudentApplication>> getAllStudentApplications() {
-        List<EntityModel<StudentApplication>> applications = studentApplicationService.getAllStudentsApplications()
+        List<EntityModel<StudentApplication>> applications = studentAplicationRepository.getAllStudentsApplications()
                 .stream()
                 .map(assembler::toModel)
                 .collect(Collectors.toList());
@@ -84,7 +84,7 @@ public class StudentApplicationController {
         }
 
         try {
-            Integer rowsAffected = studentApplicationService.updateStudentsApplicationStatus(studentID, statusString);
+            Integer rowsAffected = studentAplicationRepository.updateStudentsApplicationStatus(studentID, statusString);
 
             if (rowsAffected >= 1) {
                 return ResponseEntity.ok("Student status successful");
@@ -118,7 +118,7 @@ public class StudentApplicationController {
                 throw new Error("You have no authority to update Status's");
             }
 
-            Integer rowsAffected = studentApplicationService.updateStudentsApplicationColumnValue(studentID,
+            Integer rowsAffected = studentAplicationRepository.updateStudentsApplicationColumnValue(studentID,
                     columNameString, valueString);
 
             if (rowsAffected >= 1) {

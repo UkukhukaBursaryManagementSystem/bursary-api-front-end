@@ -1,8 +1,7 @@
 package com.ukukhula.bursaryapi.controllers;
 
-import com.ukukhula.bursaryapi.assemblers.UniversityAllocationAssembler;
 import com.ukukhula.bursaryapi.entities.UniversityAllocation;
-import com.ukukhula.bursaryapi.services.UniversityAllocationService;
+import com.ukukhula.bursaryapi.repositories.UniversityAllocationRepository;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -26,31 +25,26 @@ import org.springframework.web.bind.annotation.PutMapping;
 @RequestMapping("/allocations")
 public class UniversityAllocationController {
     @Autowired
-    private UniversityAllocationService universityAllocationService;
-    private UniversityAllocationAssembler universityAssembler;
+    private UniversityAllocationRepository universityAllocationRepository;
 
-    UniversityAllocationController(UniversityAllocationAssembler universityAssembler,
-            UniversityAllocationService universityAllocationService) {
-        this.universityAssembler = universityAssembler;
-        this.universityAllocationService = universityAllocationService;
+    UniversityAllocationController(
+            UniversityAllocationRepository universityAllocationRepository) {
+        this.universityAllocationRepository = universityAllocationRepository;
     }
 
     @GetMapping("/{id}")
-    public EntityModel<UniversityAllocation> getUniversityAllocationById(@PathVariable int id) {
-
-        UniversityAllocation universityAllocation = universityAllocationService.findUniversityAllocationById(id);
-
-        return universityAssembler.toModel(universityAllocation);
+    public UniversityAllocation getUniversityAllocationById(@PathVariable int id) {
+        return universityAllocationRepository.findById(id);
     }
 
     @GetMapping("/all")
     public List<UniversityAllocation> getAllUniversityAllocations() {
-        return universityAllocationService.getAllUniversityAllocations();
+        return universityAllocationRepository.getAllUniversityAllocations();
     }
 
     @PutMapping("/allocate-to-all")
     public ResponseEntity<String> allocateFundsEvenlyToApproved() {
-        Integer updatedRows = universityAllocationService.allocateFundsToAllUniversities();
+        Integer updatedRows = universityAllocationRepository.allocateFundsToAllUniversities();
 
         if (updatedRows > 0) {
             return ResponseEntity.ok("Funds allocated evenly to approved universities.");
@@ -66,17 +60,17 @@ public class UniversityAllocationController {
         int bursaryDetailsId = Integer.parseInt(allocationDetails.get("bursaryDetailsId").toString());
 
         try {
-            Integer result = universityAllocationService.addNewAllocation(universityId, amount, bursaryDetailsId);
+            Integer result = universityAllocationRepository.addNewAllocation(universityId, amount, bursaryDetailsId);
             return "Allocation added successfully. Rows affected: " + result; // ResponseEntity.ok
-        } catch (IllegalStateException e) { 
-            throw e;  
+        } catch (IllegalStateException e) {
+            throw e;
         }
     }
 
     @GetMapping("/totalspent/{year}")
     public ResponseEntity<Object> getTotalSpentInYear(@PathVariable int year) {
         try {
-            BigDecimal totalSpent = universityAllocationService.getTotalSpentInYear(year);
+            BigDecimal totalSpent = universityAllocationRepository.getTotalSpentInYear(year);
             if (totalSpent == null) {
                 throw new RuntimeException("No allocations for that year");
             }

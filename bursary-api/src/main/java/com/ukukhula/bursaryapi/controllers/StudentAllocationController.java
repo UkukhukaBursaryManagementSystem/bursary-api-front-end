@@ -9,14 +9,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import com.ukukhula.bursaryapi.entities.StudentAllocation;
-import com.ukukhula.bursaryapi.services.StudentAllocationService;
+import com.ukukhula.bursaryapi.repositories.StudentAllocationRepository;
 
 @Controller
 public class StudentAllocationController {
 
-    private final StudentAllocationService studentAllocationRepository;
+    private final StudentAllocationRepository studentAllocationRepository;
 
-    public StudentAllocationController(StudentAllocationService studentAllocationRepository) {
+    public StudentAllocationController(StudentAllocationRepository studentAllocationRepository) {
         this.studentAllocationRepository = studentAllocationRepository;
     }
 

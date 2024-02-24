@@ -15,56 +15,44 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.ukukhula.bursaryapi.assemblers.StudentApplicationAssembler;
 import com.ukukhula.bursaryapi.entities.StudentApplication;
+import com.ukukhula.bursaryapi.repositories.StudentApplicationRepository;
 import com.ukukhula.bursaryapi.exceptions.StudentApplicationException;
 import com.ukukhula.bursaryapi.exceptions.ApplicationInvalidStatusException;
-import com.ukukhula.bursaryapi.services.StudentApplicationService;
 
 @RestController
 @RestControllerAdvice
 
 public class StudentApplicationController {
 
-    private final StudentApplicationService studentApplicationService;
-    private final StudentApplicationAssembler assembler;
+    private final StudentApplicationRepository studentApplicationRepository;
 
-    public StudentApplicationController(StudentApplicationService studentApplicationService,
-            StudentApplicationAssembler assembler) {
-        this.studentApplicationService = studentApplicationService;
-        this.assembler = assembler;
+    public StudentApplicationController(StudentApplicationRepository studentApplicationRepository) {
+        this.studentApplicationRepository = studentApplicationRepository;
+
     }
 
     @GetMapping("/student/{studentId}")
     public ResponseEntity<?> getStudentApplications(@PathVariable int studentId) {
-
         if (studentId <= 0) {
             return ResponseEntity.badRequest().body("Student ID is not provided");
         }
-        StudentApplication application = studentApplicationService.findByStudentID(studentId);
-
+        StudentApplication application = studentApplicationRepository.findByStudentID(studentId);
         if (application == null) {
             return ResponseEntity.notFound().build();
         }
-
-        EntityModel<StudentApplication> entityModel = assembler.toModel(application);
-
-        return ResponseEntity.ok(entityModel);
+        return ResponseEntity.ok(application);
     }
 
     @GetMapping("/students")
-    public CollectionModel<EntityModel<StudentApplication>> getAllStudentApplications() {
-        List<EntityModel<StudentApplication>> applications = studentApplicationService.getAllStudentsApplications()
-                .stream()
-                .map(assembler::toModel)
-                .collect(Collectors.toList());
-
-        return CollectionModel.of(applications);
+    public List<StudentApplication> getAllStudentApplications() {
+        List<StudentApplication> applications = studentApplicationRepository.getAllStudentsApplications();
+        return applications;
     }
 
     @ExceptionHandler({ StudentApplicationException.class,
             ApplicationInvalidStatusException.class })
-            
+
     @PutMapping("/status/{studentID}")
     public ResponseEntity<?> updateStudentsApplicationStatus(@PathVariable int studentID,
             @RequestBody Map<String, String> requestBody) {
@@ -84,7 +72,8 @@ public class StudentApplicationController {
         }
 
         try {
-            Integer rowsAffected = studentApplicationService.updateStudentsApplicationStatus(studentID, statusString);
+            Integer rowsAffected = studentApplicationRepository.updateStudentsApplicationStatus(studentID,
+                    statusString);
 
             if (rowsAffected >= 1) {
                 return ResponseEntity.ok("Student status successful");
@@ -118,7 +107,7 @@ public class StudentApplicationController {
                 throw new Error("You have no authority to update Status's");
             }
 
-            Integer rowsAffected = studentApplicationService.updateStudentsApplicationColumnValue(studentID,
+            Integer rowsAffected = studentApplicationRepository.updateStudentsApplicationColumnValue(studentID,
                     columNameString, valueString);
 
             if (rowsAffected >= 1) {

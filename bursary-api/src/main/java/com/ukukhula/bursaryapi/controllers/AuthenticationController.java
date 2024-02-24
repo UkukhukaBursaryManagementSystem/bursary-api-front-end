@@ -4,7 +4,7 @@ import com.ukukhula.bursaryapi.entities.LoginResponse;
 import com.ukukhula.bursaryapi.entities.User;
 import com.ukukhula.bursaryapi.security.JwtIssuer;
 
-import com.ukukhula.bursaryapi.services.UserRoleService;
+import com.ukukhula.bursaryapi.repositories.UserRoleRepository;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.validation.annotation.Validated;
@@ -18,11 +18,11 @@ import java.util.List;
 public class AuthenticationController {
 
     private final JwtIssuer jwtIssuer;
-    private final UserRoleService userRoleService;
+    private final UserRoleRepository userRoleRepository;
 
-    public AuthenticationController(JwtIssuer jwtIssuer, UserRoleService userRoleService) {
+    public AuthenticationController(JwtIssuer jwtIssuer, UserRoleRepository userRoleRepository) {
         this.jwtIssuer = jwtIssuer;
-        this.userRoleService = userRoleService;
+        this.userRoleRepository = userRoleRepository;
     }
 
     @PostMapping("/auth/login")

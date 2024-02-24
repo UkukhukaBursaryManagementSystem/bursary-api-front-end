@@ -9,45 +9,45 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import com.ukukhula.bursaryapi.entities.StudentAllocation;
-import com.ukukhula.bursaryapi.services.StudentAllocationService;
+import com.ukukhula.bursaryapi.repositories.StudentAllocationRepository;
 
 @Controller
 public class StudentAllocationController {
 
-    private final StudentAllocationService studentAllocationService;
+    private final StudentAllocationRepository studentAllocationRepository;
 
-    public StudentAllocationController(StudentAllocationService studentAllocationService) {
-        this.studentAllocationService = studentAllocationService;
+    public StudentAllocationController(StudentAllocationRepository studentAllocationRepository) {
+        this.studentAllocationRepository = studentAllocationRepository;
     }
 
     @GetMapping("/student/allocation")
     public ResponseEntity<List<StudentAllocation>> getAllStudentAllocations() {
-        List<StudentAllocation> allocations = studentAllocationService.getAllStudentAllocations();
+        List<StudentAllocation> allocations = studentAllocationRepository.getAllStudentAllocations();
         return ResponseEntity.ok(allocations);
     }
 
     @GetMapping("student/allocation/{id}")
     public ResponseEntity<StudentAllocation> getStudentAllocationById(@PathVariable int id) {
-        StudentAllocation allocation = studentAllocationService.getStudentAllocationById(id);
+        StudentAllocation allocation = studentAllocationRepository.getStudentAllocationById(id);
         return allocation != null ? ResponseEntity.ok(allocation) : ResponseEntity.notFound().build();
     }
 
     @PostMapping("/student/allocation")
     public ResponseEntity<StudentAllocation> createStudentAllocation(@RequestBody StudentAllocation studentAllocation) {
-        StudentAllocation createdAllocation = studentAllocationService.createStudentAllocation(studentAllocation);
+        StudentAllocation createdAllocation = studentAllocationRepository.createStudentAllocation(studentAllocation);
         return ResponseEntity.ok(createdAllocation);
     }
 
     @PutMapping("/student/allocation/{id}")
     public ResponseEntity<StudentAllocation> updateStudentAllocation(
             @PathVariable int id, @RequestBody StudentAllocation updatedAllocation) {
-        StudentAllocation result = studentAllocationService.updateStudentAllocation(id, updatedAllocation);
+        StudentAllocation result = studentAllocationRepository.updateStudentAllocation(id, updatedAllocation);
         return ResponseEntity.ok(result);
     }
 
     @DeleteMapping("/student/allocation/{id}")
     public ResponseEntity<Void> deleteStudentAllocation(@PathVariable int id) {
-        studentAllocationService.deleteStudentAllocation(id);
+        studentAllocationRepository.deleteStudentAllocation(id);
         return ResponseEntity.noContent().build();
     }
 
@@ -56,7 +56,7 @@ public class StudentAllocationController {
         int year = requestBody.get("year");
         int universityId = requestBody.get("universityId");
 
-        BigDecimal totalSpent = studentAllocationService.getStudentAllocationsTotalSpent(year, universityId);
+        BigDecimal totalSpent = studentAllocationRepository.getStudentAllocationsTotalSpent(year, universityId);
         return ResponseEntity.ok(totalSpent);
     }
 }

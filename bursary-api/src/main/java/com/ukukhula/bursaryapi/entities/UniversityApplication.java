@@ -7,14 +7,14 @@ public class UniversityApplication {
     private int id;
     private int universityId;
     private String motivation;
-    private String status;
-    private String rejectionReason;
+    private String statusId;
+    private String reviewerComment;
 
-    public UniversityApplication(int id, int universityId, String motivation, String status, String rejectionReason) {
+    public UniversityApplication(int id, int universityId, String motivation, String statusId, String reviewerComment) {
         this.id = id;
         this.universityId = universityId;
         this.motivation = motivation;
-        this.status = status;
-        this.rejectionReason = rejectionReason;
+        this.statusId = statusId;
+        this.reviewerComment = reviewerComment;
     }
 }

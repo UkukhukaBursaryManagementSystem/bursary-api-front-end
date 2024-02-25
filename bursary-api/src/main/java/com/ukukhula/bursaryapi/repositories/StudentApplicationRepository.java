@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -50,6 +51,41 @@ public class StudentApplicationRepository {
     );
     }
 
+
+    public List<StudentApplicationDTO> getAllStudentApplicationsDTO() {
+        String sql = "SELECT  " +
+            "ApplicationID,FirstName, LastName, IDNumber, GenderIdentity, Ethnicity, " +
+            "UniversityName, CourseOfStudy, ReviewerComment, Department, PhoneNumber,Status,HODName,FundingYear, BursaryAmount,Motivation,HeadOfDepartmentID, Email " +
+            "FROM dbo.vStudentApplications";
+    
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+            StudentApplicationDTO studentInfo = new StudentApplicationDTO(
+                rs.getLong("ApplicationID"),
+                rs.getString("FirstName"),
+                rs.getString("LastName"),
+                rs.getString("IDNumber"),
+                rs.getString("GenderIdentity"),
+                rs.getString("Ethnicity"),
+                rs.getString("PhoneNumber"),
+                rs.getString("Email"),
+                rs.getString("UniversityName"),
+                rs.getString("department"), 
+                rs.getString("CourseOfStudy"),
+                rs.getString("ReviewerComment"),
+                rs.getString("Motivation"), 
+                rs.getBigDecimal("BursaryAmount"), 
+                rs.getInt("FundingYear"),
+                rs.getString("Status"),
+                rs.getLong("HeadOfDepartmentID"),
+                rs.getString("HODName")
+            );
+            
+            return studentInfo;
+        });
+    }
+    
+
+  
     private final RowMapper<StudentApplication> studentRowMapper = ((resultSet,
             rowNumber) -> {
         return new StudentApplication(resultSet.getInt("ID"),

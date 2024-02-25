@@ -94,7 +94,17 @@ public class StudentApplicationController {
         }
     }
 
-    @PutMapping("/student/updateColumn/{studentID}")
+ @GetMapping("/student-application")
+    public ResponseEntity<List<StudentApplicationDTO>> getAllStudentApplicationsDTO() {
+        try {
+            List<StudentApplicationDTO> applications = studentApplicationRepository.getAllStudentApplicationsDTO();
+            return new ResponseEntity<>(applications, HttpStatus.OK);
+        } catch (Exception e) {
+            throw new RuntimeException("An error occurred while retrieving student applications", e);
+        }
+    }
+
+  @PutMapping("/student/updateColumn/{studentID}")
     public ResponseEntity<?> updateStudentsApplicationColumnValue(@PathVariable int studentID,
             @RequestBody Map<String, String> requestBody) {
 

@@ -8,11 +8,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+
 import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.CrossOrigin;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,14 +36,34 @@ public class UniversityAllocationController {
         this.universityAllocationRepository = universityAllocationRepository;
     }
 
-    @GetMapping("/{id}")
-    public UniversityAllocation getUniversityAllocationById(@PathVariable int id) {
-        return universityAllocationRepository.findById(id);
+    @GetMapping("/")
+    public ResponseEntity<?> getUniversityAllocationByName(@RequestParam String universityName) {
+        try {
+            UniversityAllocation allocation = universityAllocationRepository
+                    .getUniversityAllocationByName(universityName);
+            if (allocation == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("No university allocation found with university name: " + universityName);
+            } else {
+                return ResponseEntity.ok(allocation);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
+        }
     }
 
     @GetMapping("/all")
-    public List<UniversityAllocation> getAllUniversityAllocations() {
-        return universityAllocationRepository.getAllUniversityAllocations();
+    public ResponseEntity<?> getAllUniversityAllocations() {
+        try {
+            List<UniversityAllocation> allocations = universityAllocationRepository.getAllUniversityAllocations();
+            if (allocations.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No university allocations found");
+            } else {
+                return ResponseEntity.ok(allocations);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
+        }
     }
 
     @PutMapping("/allocate-to-all")

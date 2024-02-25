@@ -5,16 +5,14 @@ import java.math.BigDecimal;
 
 @Data
 public class UniversityAllocation {
-    private int id;
-    private int universityId;
+    private String universityName;
     private BigDecimal amount;
-    private int bursaryDetailsId;
+    private int year;
 
-    public UniversityAllocation(int id, int universityId, BigDecimal amount, int bursaryDetailsId) { //not necessary
-        this.id = id;
-        this.universityId = universityId;
-        this.bursaryDetailsId = bursaryDetailsId;
+    public UniversityAllocation( String universityName, BigDecimal amount, int year) { // not necessary
+        this.universityName = universityName;
         this.amount = amount;
+        this.year = year;
     }
 
 }

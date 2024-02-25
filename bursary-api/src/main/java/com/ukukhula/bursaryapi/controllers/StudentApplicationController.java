@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.ukukhula.bursaryapi.dto.NewStudentApplicationDTO;
+import com.ukukhula.bursaryapi.dto.StudentApplicationDTO;
 import com.ukukhula.bursaryapi.entities.StudentApplication;
 import com.ukukhula.bursaryapi.repositories.StudentApplicationRepository;
 import com.ukukhula.bursaryapi.exceptions.StudentApplicationException;
@@ -90,8 +91,13 @@ public class StudentApplicationController {
             throw new Error(error.getMessage());
         }
     }
+@GetMapping("/student-application")
+public List<StudentApplicationDTO> getAllStudentApplicationsDTO(){
+    List<StudentApplicationDTO> applications = studentApplicationRepository.getAllStudentApplicationsDTO();
+    return applications;
+}
 
-    @PutMapping("/student/updateColumn/{studentID}")
+  @PutMapping("/student/updateColumn/{studentID}")
     public ResponseEntity<?> updateStudentsApplicationColumnValue(@PathVariable int studentID,
             @RequestBody Map<String, String> requestBody) {
 

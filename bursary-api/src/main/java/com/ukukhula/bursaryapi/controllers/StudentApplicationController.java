@@ -1,20 +1,26 @@
 package com.ukukhula.bursaryapi.controllers;
 
+import java.sql.SQLDataException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.ukukhula.bursaryapi.dto.NewStudentApplicationDTO;
 import com.ukukhula.bursaryapi.entities.StudentApplication;
 import com.ukukhula.bursaryapi.repositories.StudentApplicationRepository;
 import com.ukukhula.bursaryapi.exceptions.StudentApplicationException;
@@ -22,7 +28,7 @@ import com.ukukhula.bursaryapi.exceptions.ApplicationInvalidStatusException;
 
 @RestController
 @RestControllerAdvice
-
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class StudentApplicationController {
 
     private final StudentApplicationRepository studentApplicationRepository;
@@ -120,4 +126,22 @@ public class StudentApplicationController {
         }
 
     }
+
+
+    @PostMapping("/student-application")
+    public ResponseEntity<?> createStudentApplication(@RequestBody NewStudentApplicationDTO application) {
+        try {
+            int rowsAffected = studentApplicationRepository.insertStudentApplication(application);
+            System.out.println("Rows that were affected "+rowsAffected);
+            if (rowsAffected == 1) {
+                return ResponseEntity.ok("Student application created successfully");
+            } else {
+                return ResponseEntity.badRequest().body("Failed to create student application");
+            }
+        } catch (SQLException e) {
+            
+            return ResponseEntity.badRequest().body("Failed to create student application: " + e.getMessage());
+        }
+    }
+
 }

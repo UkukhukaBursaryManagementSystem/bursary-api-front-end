@@ -23,4 +23,29 @@ public class StudentApplicationDTO {
     private String status;
     private Long headOfDepartmentID;
     private String HODName;
+
+    public StudentApplicationDTO(Long applicationID, String firstName, String lastName, String IDNumber,
+                                  String genderIdentity, String ethnicity, String phoneNumber, String email,
+                                  String universityName, String department, String courseOfStudy,
+                                  String reviewerComment, String motivation, BigDecimal bursaryAmount,
+                                  Integer fundingYear, String status, Long headOfDepartmentID, String HODName) {
+        this.applicationID = applicationID;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.IDNumber = IDNumber;
+        this.genderIdentity = genderIdentity;
+        this.ethnicity = ethnicity;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.universityName = universityName;
+        this.department = department;
+        this.courseOfStudy = courseOfStudy;
+        this.reviewerComment = reviewerComment;
+        this.motivation = motivation;
+        this.bursaryAmount = bursaryAmount;
+        this.fundingYear = fundingYear;
+        this.status = status;
+        this.headOfDepartmentID = headOfDepartmentID;
+        this.HODName = HODName;
+    }
 }

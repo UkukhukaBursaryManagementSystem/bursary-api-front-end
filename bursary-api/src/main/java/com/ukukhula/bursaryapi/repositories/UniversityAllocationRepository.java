@@ -17,28 +17,18 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class UniversityAllocationRepository {
-    final String SQL = "SELECT * FROM UniversityAllocation WHERE ID = ?";
+    final String SQL = "SELECT * FROM [dbo].[UniversityAllocationsView] WHERE UniversityName = ?";
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    public UniversityAllocation findById(int id) {
-        try {
-            return jdbcTemplate.queryForObject(SQL, UniversityAllocationRowMapper, id);
-        } catch (EmptyResultDataAccessException e) {
-            throw new RuntimeException("No university allocation with ID: " + id, e);
-        } catch (Exception e) {
-            throw new RuntimeException("Error finding university allocation with ID: " + id, e);
-        }
+    public UniversityAllocation getUniversityAllocationByName(String universityName) {
+        List<UniversityAllocation> result = jdbcTemplate.query(SQL, UniversityAllocationRowMapper, universityName);
+        return result.isEmpty() ? null : result.get(0);
     }
 
     public List<UniversityAllocation> getAllUniversityAllocations() {
-        try {
-            return jdbcTemplate.query("SELECT * FROM UniversityAllocation", UniversityAllocationRowMapper);
-        } catch (DataAccessException e) {
-            throw new RuntimeException("No university allocations to show", e);
-        } catch (Exception e) {
-            throw new RuntimeException("Unexpected error occurred while retrieving all university allocations", e);
-        }
+        String UNIVERSITY_ALLOCATIONS_VIEW = "SELECT * FROM [dbo].[UniversityAllocationsView]";
+        return jdbcTemplate.query(UNIVERSITY_ALLOCATIONS_VIEW, UniversityAllocationRowMapper);
     }
 
     public Integer allocateFundsToUniversity(int id, BigDecimal amount) {
@@ -127,8 +117,8 @@ public class UniversityAllocationRepository {
 
     private final RowMapper<UniversityAllocation> UniversityAllocationRowMapper = ((resultSet,
             rowNumber) -> {
-        return new UniversityAllocation(resultSet.getInt("ID"), resultSet.getInt("UniversityID"),
-                resultSet.getBigDecimal("Amount"), resultSet.getInt("BursaryDetailsID"));
+        return new UniversityAllocation(resultSet.getString("universityName"),
+                resultSet.getBigDecimal("amount"), resultSet.getInt("year"));
     });
 
     public BigDecimal getTotalSpentInYear(int year) {

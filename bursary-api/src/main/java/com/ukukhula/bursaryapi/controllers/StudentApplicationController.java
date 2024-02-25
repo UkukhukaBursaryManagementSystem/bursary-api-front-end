@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.springframework.dao.DataAccessException;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -91,11 +92,16 @@ public class StudentApplicationController {
             throw new Error(error.getMessage());
         }
     }
-@GetMapping("/student-application")
-public List<StudentApplicationDTO> getAllStudentApplicationsDTO(){
-    List<StudentApplicationDTO> applications = studentApplicationRepository.getAllStudentApplicationsDTO();
-    return applications;
-}
+
+ @GetMapping("/student-application")
+    public ResponseEntity<List<StudentApplicationDTO>> getAllStudentApplicationsDTO() {
+        try {
+            List<StudentApplicationDTO> applications = studentApplicationRepository.getAllStudentApplicationsDTO();
+            return new ResponseEntity<>(applications, HttpStatus.OK);
+        } catch (Exception e) {
+            throw new RuntimeException("An error occurred while retrieving student applications", e);
+        }
+    }
 
   @PutMapping("/student/updateColumn/{studentID}")
     public ResponseEntity<?> updateStudentsApplicationColumnValue(@PathVariable int studentID,

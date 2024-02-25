@@ -132,15 +132,15 @@ public class StudentApplicationController {
     public ResponseEntity<?> createStudentApplication(@RequestBody NewStudentApplicationDTO application) {
         try {
             int rowsAffected = studentApplicationRepository.insertStudentApplication(application);
-            System.out.println("Rows that were affected "+rowsAffected);
+            System.out.println(application);
             if (rowsAffected == 1) {
-                return ResponseEntity.ok("Student application created successfully");
+                return ResponseEntity.ok("{\"message\": \"Student application created successfully\"}");
             } else {
-                return ResponseEntity.badRequest().body("Failed to create student application");
+                return ResponseEntity.badRequest().body("\\\"error\\\": \\\"Failed to create student application\\\"}");
             }
         } catch (SQLException e) {
             
-            return ResponseEntity.badRequest().body("Failed to create student application: " + e.getMessage());
+            return ResponseEntity.badRequest().body("{\\\"error\\\": \\\"Failed to create student application: " + e.getMessage() + "\"}");
         }
     }
 

@@ -48,6 +48,5 @@ public class StudentApplicationDTO {
         this.headOfDepartmentID = headOfDepartmentID;
         this.HODName = HODName;
     }
-
 }
 

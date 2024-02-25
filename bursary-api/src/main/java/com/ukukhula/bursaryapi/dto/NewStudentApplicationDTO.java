@@ -2,6 +2,7 @@ package com.ukukhula.bursaryapi.dto;
 
 import java.math.BigDecimal;
 
+
 import lombok.Data;
 
 @Data
@@ -43,6 +44,4 @@ public class NewStudentApplicationDTO {
         this.HeadOfDepartmentID = headOfDepartmentID;
         this.FundingYear = fundingYear;
     }
-
-    // Other methods and logic specific to this class can be added here
 }

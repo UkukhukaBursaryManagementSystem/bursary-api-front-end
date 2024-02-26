@@ -159,6 +159,21 @@ public class StudentApplicationRepository {
     }
 
 
+    public Integer deleteStudentApplication(int studentId) {
+        String DELETE_STUDENT_APPLICATION = "DELETE FROM StudentApplication WHERE ID = ?";
+        String FIND_STUDENT_BY_ID = "SELECT COUNT(*) FROM StudentApplication WHERE ID = ?";
+
+        int numberOfRows = jdbcTemplate.queryForObject(FIND_STUDENT_BY_ID, Integer.class, studentId);
+
+        if (numberOfRows == 0) {
+            throw new IllegalArgumentException("No student with the given ID: " + studentId);
+        }
+
+        return jdbcTemplate.update(DELETE_STUDENT_APPLICATION, studentId);
+    }
+
+
+
 
 
 }

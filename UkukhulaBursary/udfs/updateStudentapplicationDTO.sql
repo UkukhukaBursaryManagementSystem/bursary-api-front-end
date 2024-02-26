@@ -1,4 +1,4 @@
-CREATE PROCEDURE [dbo].[Upf_UpdateStudentApplication] (
+CREATE PROCEDURE [dbo].[UpdateStudentApplicationDTO] (
     @StudentApplicationID INT,
     @FirstName VARCHAR(100),
     @LastName VARCHAR(100),
@@ -8,19 +8,19 @@ CREATE PROCEDURE [dbo].[Upf_UpdateStudentApplication] (
     @CourseOfStudy VARCHAR(100),
     @ReviewerComment TEXT,
     @Motivation TEXT,
-    @BursaryAmount MONEY,
-    @FundingYear INT,
-    @Date DATE,
-    @UniversityName VARCHAR(100),
+  @BursaryAmount MONEY,
+  @FundingYear INT,
+   @Date DATE,
+	@UniversityName VARCHAR(100),
 	@Department VARCHAR(100),
-    @HeadOfDepartmentID INT,
-    @UserID INT,
+   @HeadOfDepartmentID INT,
+   @UserID INT,
     @GenderID INT, 
     @EthnicityID INT,
-    @ContactID INT,
+   @ContactID INT,
     @UniversityID INT,
     @DepartmentID INT,
-	@StudentID INT,
+		@StudentID INT,
    @ApplicationStatusID INT
 )
 AS

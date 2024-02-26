@@ -10,6 +10,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @RequestMapping("/allocations")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UniversityAllocationController {
     @Autowired
     private UniversityAllocationRepository universityAllocationRepository;
@@ -73,12 +75,13 @@ public class UniversityAllocationController {
 
     @PostMapping("/addnew")
     public String addNewAllocation(@RequestBody Map<String, Object> allocationDetails) {
-        int universityId = Integer.parseInt(allocationDetails.get("universityId").toString());
+      
+        String universityName = (String) allocationDetails.get("universityName");
         BigDecimal amount = new BigDecimal(allocationDetails.get("amount").toString());
-        int bursaryDetailsId = Integer.parseInt(allocationDetails.get("bursaryDetailsId").toString());
+        int year = Integer.parseInt(allocationDetails.get("year").toString());
 
         try {
-            Integer result = universityAllocationRepository.addNewAllocation(universityId, amount, bursaryDetailsId);
+            Integer result = universityAllocationRepository.addNewAllocation(universityName, amount, year);
             return "Allocation added successfully. Rows affected: " + result; // ResponseEntity.ok
         } catch (IllegalStateException e) {
             throw e;

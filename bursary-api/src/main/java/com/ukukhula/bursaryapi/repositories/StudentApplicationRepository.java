@@ -84,8 +84,6 @@ public class StudentApplicationRepository {
         });
     }
     
-
-  
     private final RowMapper<StudentApplication> studentRowMapper = ((resultSet,
             rowNumber) -> {
         return new StudentApplication(resultSet.getInt("ID"),
@@ -96,6 +94,21 @@ public class StudentApplicationRepository {
                 resultSet.getString("ReviewerComment"),
                 resultSet.getDate("Date"));
     });
+
+    public Boolean updateApplication(Long applicationID, StudentApplicationDTO updatedApplicationDTO){
+        String sql = "UPDATE StudentApplicationDTO "+
+       "SET FirstName =?, LastName= ?"+
+        " WHERE applicationID=?";
+
+        int rowsAffected = jdbcTemplate.update(sql,
+        updatedApplicationDTO.getFirstName(),
+        updatedApplicationDTO.getLastName(),
+         applicationID
+        );
+
+        return rowsAffected > 0;
+
+    }
 
     public StudentApplication findByStudentID(int studentID) {
         String SQL = "SELECT * FROM StudentApplication WHERE StudentID = ?";
@@ -150,6 +163,29 @@ public class StudentApplicationRepository {
         return studentApplications;
     }
 
+    // public boolean updateStudentApplicationDTO(Long applicationId, StudentApplicationDTO updatedApplicationDTO) {
+    //     String sql = "EXEC UpdateStudentApplicationDTO ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
+    
+    //     int rowsAffected = jdbcTemplate.update(sql,
+    //             applicationId,
+    //             updatedApplicationDTO.getFirstName(),
+    //             updatedApplicationDTO.getLastName(),
+    //             updatedApplicationDTO.getIDNumber(),
+    //             updatedApplicationDTO.getGenderIdentity(),
+    //             updatedApplicationDTO.getEthnicity(),
+    //             updatedApplicationDTO.getUniversityName(),
+    //             updatedApplicationDTO.getCourseOfStudy(),
+    //             updatedApplicationDTO.getReviewerComment(),
+    //             updatedApplicationDTO.getMotivation(),
+    //             updatedApplicationDTO.getBursaryAmount(),
+    //             updatedApplicationDTO.getFundingYear(),
+    //             updatedApplicationDTO.getStatus(),
+    //             updatedApplicationDTO.getHODName(),
+    //             updatedApplicationDTO.getHeadOfDepartmentID());
+    
+    //     return rowsAffected > 0;
+    // }
+    
     
     public Integer updateStudentsApplicationColumnValue(int studentID, String columnName, String value) {
 

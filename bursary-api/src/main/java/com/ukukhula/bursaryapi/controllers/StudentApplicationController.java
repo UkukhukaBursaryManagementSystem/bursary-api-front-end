@@ -94,16 +94,6 @@ public class StudentApplicationController {
         }
     }
 
- @GetMapping("/student-application")
-    public ResponseEntity<List<StudentApplicationDTO>> getAllStudentApplicationsDTO() {
-        try {
-            List<StudentApplicationDTO> applications = studentApplicationRepository.getAllStudentApplicationsDTO();
-            return new ResponseEntity<>(applications, HttpStatus.OK);
-        } catch (Exception e) {
-            throw new RuntimeException("An error occurred while retrieving student applications", e);
-        }
-    }
-
   @PutMapping("/student/updateColumn/{studentID}")
     public ResponseEntity<?> updateStudentsApplicationColumnValue(@PathVariable int studentID,
             @RequestBody Map<String, String> requestBody) {
@@ -140,7 +130,6 @@ public class StudentApplicationController {
 
     }
 
-
     @PostMapping("/student-application")
     public ResponseEntity<?> createStudentApplication(@RequestBody NewStudentApplicationDTO application) {
         try {
@@ -158,7 +147,7 @@ public class StudentApplicationController {
     }
 
     @GetMapping("/student-applications-by-hod")
-public ResponseEntity<List<StudentApplicationDTO>> getStudentApplicationsByHODName(@RequestParam String hodName) {
+    public ResponseEntity<List<StudentApplicationDTO>> getStudentApplicationsByHODName(@RequestParam String hodName) {
     try {
         List<StudentApplicationDTO> applications = studentApplicationRepository.findByHODName(hodName);
         return new ResponseEntity<>(applications, HttpStatus.OK);
@@ -167,4 +156,23 @@ public ResponseEntity<List<StudentApplicationDTO>> getStudentApplicationsByHODNa
     }
 }
 
+    @GetMapping("/student-application")
+    public ResponseEntity<List<StudentApplicationDTO>> getAllStudentApplicationsDTO() {
+        try {
+            List<StudentApplicationDTO> applications = studentApplicationRepository.getAllStudentApplicationsDTO();
+            return new ResponseEntity<>(applications, HttpStatus.OK);
+        } catch (Exception e) {
+         throw new RuntimeException("An error occurred while retrieving student applications", e);
+        }
+    }
+    
+    @PutMapping("/student-application/{applicationId}")
+    public ResponseEntity<String> updateApplication(@PathVariable Long applicationId, @RequestBody StudentApplicationDTO updatedApplicationDTO) {
+        boolean success = studentApplicationRepository.updateApplication(applicationId, updatedApplicationDTO);
+        if (success) {
+            return ResponseEntity.ok("Student application updated successfully");
+        } else {
+            return new ResponseEntity<>("Failed to update student application", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

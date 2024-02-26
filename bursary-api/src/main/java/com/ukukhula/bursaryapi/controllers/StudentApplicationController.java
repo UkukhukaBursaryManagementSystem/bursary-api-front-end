@@ -1,20 +1,29 @@
 package com.ukukhula.bursaryapi.controllers;
 
+import java.sql.SQLDataException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.ukukhula.bursaryapi.dto.NewStudentApplicationDTO;
+import com.ukukhula.bursaryapi.dto.StudentApplicationDTO;
 import com.ukukhula.bursaryapi.entities.StudentApplication;
 import com.ukukhula.bursaryapi.repositories.StudentApplicationRepository;
 import com.ukukhula.bursaryapi.exceptions.StudentApplicationException;
@@ -22,7 +31,7 @@ import com.ukukhula.bursaryapi.exceptions.ApplicationInvalidStatusException;
 
 @RestController
 @RestControllerAdvice
-
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class StudentApplicationController {
 
     private final StudentApplicationRepository studentApplicationRepository;
@@ -85,7 +94,17 @@ public class StudentApplicationController {
         }
     }
 
-    @PutMapping("/student/updateColumn/{studentID}")
+ @GetMapping("/student-application")
+    public ResponseEntity<List<StudentApplicationDTO>> getAllStudentApplicationsDTO() {
+        try {
+            List<StudentApplicationDTO> applications = studentApplicationRepository.getAllStudentApplicationsDTO();
+            return new ResponseEntity<>(applications, HttpStatus.OK);
+        } catch (Exception e) {
+            throw new RuntimeException("An error occurred while retrieving student applications", e);
+        }
+    }
+
+  @PutMapping("/student/updateColumn/{studentID}")
     public ResponseEntity<?> updateStudentsApplicationColumnValue(@PathVariable int studentID,
             @RequestBody Map<String, String> requestBody) {
 
@@ -120,4 +139,32 @@ public class StudentApplicationController {
         }
 
     }
+
+
+    @PostMapping("/student-application")
+    public ResponseEntity<?> createStudentApplication(@RequestBody NewStudentApplicationDTO application) {
+        try {
+            int rowsAffected = studentApplicationRepository.insertStudentApplication(application);
+            System.out.println(application);
+            if (rowsAffected == 1) {
+                return ResponseEntity.ok("{\"message\": \"Student application created successfully\"}");
+            } else {
+                return ResponseEntity.badRequest().body("\\\"error\\\": \\\"Failed to create student application\\\"}");
+            }
+        } catch (SQLException e) {
+            
+            return ResponseEntity.badRequest().body("{\\\"error\\\": \\\"Failed to create student application: " + e.getMessage() + "\"}");
+        }
+    }
+
+    @GetMapping("/student-applications-by-hod")
+public ResponseEntity<List<StudentApplicationDTO>> getStudentApplicationsByHODName(@RequestParam String hodName) {
+    try {
+        List<StudentApplicationDTO> applications = studentApplicationRepository.findByHODName(hodName);
+        return new ResponseEntity<>(applications, HttpStatus.OK);
+    } catch (Exception e) {
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+
 }

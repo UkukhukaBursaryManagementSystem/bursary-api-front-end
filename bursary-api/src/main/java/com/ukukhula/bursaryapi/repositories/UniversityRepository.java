@@ -7,6 +7,10 @@ import java.util.Objects;
 
 import org.springframework.stereotype.Repository;
 
+import com.ukukhula.bursaryapi.entities.Department;
+import com.ukukhula.bursaryapi.entities.Ethnicity;
+import com.ukukhula.bursaryapi.entities.Gender;
+import com.ukukhula.bursaryapi.entities.HeadOfDepartment;
 import com.ukukhula.bursaryapi.entities.University;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -22,6 +26,17 @@ public class UniversityRepository {
   private static final String GET_UNIVERSITY_BY_ID = "{CALL " +
       "uspGetUniversityById(?)}";
   private static final String GET_ALL_UNIVERSITIES = "SELECT ID, UniversityName FROM University";
+
+
+  private static final String GET_ALL_DEPARTMENTS = "SELECT ID, Name FROM Department";
+
+  private static final String GET_ALL_HODs = "SELECT ID, Name from vHeadOFDepartments";
+
+  private static final String GET_ALL_GENDERS = "SELECT  ID,[Identity] as [Name] FROM Gender";
+
+  private static final String GET_ALL_ETHNICITY = "SELECT  ID,[Ethnic] as Name FROM Ethnicity";
+
+
 
   final JdbcTemplate jdbcTemplate;
 
@@ -68,7 +83,68 @@ public class UniversityRepository {
     }
   }
 
+
+  public List<Department> getAllDepartments() {
+    try {
+      return jdbcTemplate.query(GET_ALL_DEPARTMENTS, departmentRowMapper);
+    } catch (EmptyResultDataAccessException e) {
+      throw new RuntimeException("No departements to show");
+    } catch (Exception e) {
+      throw new RuntimeException("Unexpected error occurred", e);
+    }
+  }
+
+
+  public List<HeadOfDepartment> getAllHeadOfDepartments() {
+    try {
+      return jdbcTemplate.query(GET_ALL_HODs, headDepartmentRowMapper);
+    } catch (EmptyResultDataAccessException e) {
+      throw new RuntimeException("No head of  departements to show");
+    } catch (Exception e) {
+      throw new RuntimeException("Unexpected error occurred", e);
+    }
+  }
+
+
+  public List<Gender> getAllGenders() {
+    try {
+      return jdbcTemplate.query(GET_ALL_GENDERS, genderRowMapper);
+    } catch (EmptyResultDataAccessException e) {
+      throw new RuntimeException("No head of genders to show");
+    } catch (Exception e) {
+      throw new RuntimeException("Unexpected error occurred", e);
+    }
+  }
+
+  public List<Ethnicity> getAllEthnicities() {
+    try {
+      return jdbcTemplate.query(GET_ALL_ETHNICITY,  ethnicityRowMapper);
+    } catch (EmptyResultDataAccessException e) {
+      throw new RuntimeException("No head of  ethnicities to show");
+    } catch (Exception e) {
+      throw new RuntimeException("Unexpected error occurred", e);
+    }
+  }
+
   private final RowMapper<University> universityRowMapper = ((resultSet,
       rowNumber) -> new University(resultSet.getInt("ID"),
           resultSet.getString("UniversityName")));
+
+
+  private final RowMapper<Department> departmentRowMapper = ((resultSet,
+  rowNumber) -> new Department(resultSet.getInt("ID"),
+      resultSet.getString("Name")));
+
+
+    private final RowMapper<HeadOfDepartment> headDepartmentRowMapper = ((resultSet,
+    rowNumber) -> new HeadOfDepartment(resultSet.getInt("ID"),
+        resultSet.getString("Name")));
+
+    private final RowMapper<Gender> genderRowMapper = ((resultSet,
+    rowNumber) -> new Gender(resultSet.getInt("ID"),
+        resultSet.getString("Name")));
+
+    private final RowMapper<Ethnicity> ethnicityRowMapper = ((resultSet,
+    rowNumber) -> new Ethnicity(resultSet.getInt("ID"),
+        resultSet.getString("Name")));
 }

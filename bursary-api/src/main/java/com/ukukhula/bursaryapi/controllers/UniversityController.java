@@ -2,6 +2,10 @@ package com.ukukhula.bursaryapi.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ukukhula.bursaryapi.entities.Department;
+import com.ukukhula.bursaryapi.entities.Ethnicity;
+import com.ukukhula.bursaryapi.entities.Gender;
+import com.ukukhula.bursaryapi.entities.HeadOfDepartment;
 import com.ukukhula.bursaryapi.entities.University;
 
 import java.util.List;
@@ -16,10 +20,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import com.ukukhula.bursaryapi.repositories.UniversityRepository;
+
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UniversityController {
 
   private final UniversityRepository universityRepository;
@@ -45,5 +52,29 @@ public class UniversityController {
   public University one(@PathVariable int id) {
     return universityRepository.getUniversityById(id);
 
+  }
+
+  @GetMapping("/department")
+  public List<Department> allDepartments() {
+
+    return universityRepository.getAllDepartments();
+  }
+
+
+  @GetMapping("/hod")
+  public List<HeadOfDepartment> allHeadDepartments() {
+
+    return universityRepository.getAllHeadOfDepartments();
+  }
+  @GetMapping("/ethnicity")
+  public List<Ethnicity> allEthnicities() {
+
+    return universityRepository.getAllEthnicities();
+  }
+
+  @GetMapping("/biological-sex")
+  public List<Gender> allGenders() {
+
+    return universityRepository.getAllGenders();
   }
 }

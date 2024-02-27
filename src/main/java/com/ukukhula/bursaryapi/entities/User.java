@@ -12,20 +12,18 @@ import java.util.List;
 
 @Data
 public class User {
-    private int id;
+
     private String firstName;
     private String lastName;
-    private int contactId;
-    private int userRoleId;
-    private boolean isUserActive;
+    private String email;
+    private String role;
 
-    public User(int id, String firstName, String lastName, int contactId,
-                int userRoleId, boolean isUserActive) {
-        this.id = id;
+    public User(String firstName, String lastName, String email, String role) {
+
         this.firstName = firstName;
         this.lastName = lastName;
-        this.contactId = contactId;
-        this.userRoleId = userRoleId;
-        this.isUserActive = isUserActive;
+        this.email = email;
+        this.role = role;
+        
     }
 }

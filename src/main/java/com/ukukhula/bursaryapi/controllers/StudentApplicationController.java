@@ -170,13 +170,13 @@ public class StudentApplicationController {
     }
 
     @GetMapping("/student-applications-by-hod")
-public ResponseEntity<List<StudentApplicationDTO>> getStudentApplicationsByHODName(@RequestParam String hodName) {
-    try {
-        List<StudentApplicationDTO> applications = studentApplicationRepository.findByHODName(hodName);
-        return new ResponseEntity<>(applications, HttpStatus.OK);
-    } catch (Exception e) {
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    public ResponseEntity<List<StudentApplicationDTO>> getStudentApplicationsByHODName(@RequestParam String hodName) {
+        try {
+            List<StudentApplicationDTO> applications = studentApplicationRepository.findByHODName(hodName);
+            return new ResponseEntity<>(applications, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 }
 
 }

@@ -4,7 +4,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ukukhula.bursaryapi.repositories.UserRepository;
 import com.ukukhula.bursaryapi.entities.User;
-import java.util.Optional;
 import org.springframework.http.ResponseEntity;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
@@ -14,7 +13,6 @@ import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import com.ukukhula.bursaryapi.repositories.UniversityRepository;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;

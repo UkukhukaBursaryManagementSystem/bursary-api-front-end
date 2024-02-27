@@ -7,15 +7,13 @@ CREATE PROCEDURE UpdateStudentDetails
     @PhoneNumber CHAR(10),
     @Email VARCHAR(100),
     @Ethnicity VARCHAR(20),
-    @UniversityName VARCHAR(100),
     @CourseOfStudy VARCHAR(100),
     @DepartmentName VARCHAR(100),
     @ReviewerComment TEXT,
     @Motivation TEXT,
     @RequestedAmount MONEY,
     @FundingYear INT,
-    @ApplicationStatus VARCHAR(20),
-    @HeadOfDepartmentName VARCHAR(100)
+    @ApplicationStatus VARCHAR(20)
 
 AS
 BEGIN
@@ -39,9 +37,8 @@ BEGIN
         -- Update Student table
         UPDATE [dbo].[Student]
         SET IDNumber = @IDNumber,
-            GenderID = (SELECT ID FROM [dbo].[Gender] WHERE Identity = @Gender),
+            GenderID = (SELECT ID FROM [dbo].[Gender] WHERE [Identity] = @Gender),
             EthnicityID = (SELECT ID FROM [dbo].[Ethnicity] WHERE Ethnic = @Ethnicity),
-            UniversityID = (SELECT ID FROM [dbo].[University] WHERE UniversityName = @UniversityName),
             DepartmentID = (SELECT ID FROM [dbo].[Department] WHERE Name = @DepartmentName),
             CourseOfStudy = @CourseOfStudy
         WHERE ID = @StudentID;
@@ -52,12 +49,9 @@ BEGIN
             Motivation = @Motivation,
             BursaryAmount = @RequestedAmount,
             FundingYear = @FundingYear,
-            ApplicationStatus = @ApplicationStatus,
-            HeadOfDepartmentID = @HeadOfDepartmentID,
-            HeadOfDepartmentName = @HeadOfDepartmentName
+            StatusId = (SELECT ID FROM [dbo].[ApplicationStatus] WHERE Status = @ApplicationStatus)
         WHERE StudentID = @StudentID;
 
-   
         COMMIT;
     END TRY
     BEGIN CATCH

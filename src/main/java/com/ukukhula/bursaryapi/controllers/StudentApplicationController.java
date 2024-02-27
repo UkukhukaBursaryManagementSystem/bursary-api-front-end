@@ -152,20 +152,14 @@ public class StudentApplicationController {
 
     }
 
-
+    
     @PostMapping("/student-application")
-    public ResponseEntity<?> createStudentApplication(@RequestBody NewStudentApplicationDTO application) {
+    public ResponseEntity<?> createStudentApp(@RequestBody NewStudentApplicationDTO application) {
         try {
-            int rowsAffected = studentApplicationRepository.insertStudentApplication(application);
-            System.out.println(application);
-            if (rowsAffected == 1) {
-                return ResponseEntity.ok("{\"message\": \"Student application created successfully\"}");
-            } else {
-                return ResponseEntity.badRequest().body("\\\"error\\\": \\\"Failed to create student application\\\"}");
-            }
-        } catch (SQLException e) {
-            
-            return ResponseEntity.badRequest().body("{\\\"error\\\": \\\"Failed to create student application: " + e.getMessage() + "\"}");
+            studentApplicationRepository.createApplication(application);
+            return ResponseEntity.ok("{\"message\": \"Student application created successfully\"}");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("{\\\"error\\\": \\\"Failed to create student application,please ensure all fields a valid\"}");
         }
     }
 

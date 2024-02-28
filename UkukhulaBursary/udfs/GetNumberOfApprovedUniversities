@@ -1,0 +1,14 @@
+CREATE FUNCTION dbo.GetApprovedUniversityCount()
+RETURNS INT
+AS
+BEGIN
+    DECLARE @ApprovedCount INT;
+
+    SELECT @ApprovedCount = COUNT(DISTINCT UA.UniversityID)
+    FROM dbo.UniversityApplication UA
+    INNER JOIN dbo.ApplicationStatus AS AS1 ON UA.StatusID = AS1.ID
+    WHERE AS1.Status = 'Approved';
+
+    RETURN @ApprovedCount;
+END;
+GO

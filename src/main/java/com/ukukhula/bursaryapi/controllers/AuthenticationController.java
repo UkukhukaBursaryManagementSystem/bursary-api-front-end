@@ -27,7 +27,6 @@ public class AuthenticationController {
 
     @PostMapping("/auth/login")
     public LoginResponse login(@RequestBody @Validated User userDetails) {
-//        System.out.println(userDetails);
 
         var token = jwtIssuer.issue(1, userDetails.getFirstName(),
                 List.of("USER"));

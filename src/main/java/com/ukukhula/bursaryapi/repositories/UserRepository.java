@@ -16,22 +16,27 @@ public class UserRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public Optional<User> getUserByEmail(String email) {
-        String GET_USER_BY_EMAIL = "SELECT * FROM [dbo].[User] LEFT JOIN " +
-                "Contact" +
-                " " +
-                "ON [dbo].[User].ContactID = Contact.ID WHERE Contact.Email =" +
-                " ?";
-        return Optional.ofNullable(jdbcTemplate.queryForObject(GET_USER_BY_EMAIL,
-                userRowMapper, 1));
+    public User getUserByEmail(String email) {
+        String GET_USER_BY_EMAIL = "SELECT " +
+                    "[User].FirstName, " +
+                    "[User].LastName, " +
+                    "Contact.Email, " +
+                    "[UserRole].[Role] " +
+                    "FROM " +
+                    "[User] " +
+                    "JOIN Contact ON [User].ContactID = Contact.ID " +
+                    "JOIN UserRole ON [User].[UserRoleID] = UserRole.ID " +
+                    "WHERE Contact.Email = ?";
+        return Optional.ofNullable(jdbcTemplate.queryForObject(GET_USER_BY_EMAIL, userRowMapper, email)).get();
     }
 
     public Boolean doesUserExist(String email) {
         return null;
     }
 
-    private final RowMapper<User> userRowMapper = ((resultSet, rowNumber) -> new User(resultSet.getInt("ID"),
+    private final RowMapper<User> userRowMapper = ((resultSet, rowNumber) -> new User(
             resultSet.getString("firstName"),
             resultSet.getString("lastName"),
-            resultSet.getInt("ContactID"), resultSet.getInt("UserRoleID"), resultSet.getBoolean("IsUserActive")));
+            resultSet.getString("email"),
+            resultSet.getString("role")));
 }

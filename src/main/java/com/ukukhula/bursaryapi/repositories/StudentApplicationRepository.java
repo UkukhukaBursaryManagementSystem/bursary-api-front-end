@@ -1,5 +1,6 @@
 package com.ukukhula.bursaryapi.repositories;
 
+import com.ukukhula.bursaryapi.dto.DocumentsDTO;
 import com.ukukhula.bursaryapi.dto.NewStudentApplicationDTO;
 import com.ukukhula.bursaryapi.dto.StudentApplicationDTO;
 import com.ukukhula.bursaryapi.entities.StudentApplication;
@@ -200,6 +201,22 @@ public class StudentApplicationRepository {
                 .addValue("BursaryAmount", application.getBursaryAmount())
                 .addValue("HeadOfDepartmentID", application.getHeadOfDepartmentID())
                 .addValue("FundingYear", application.getFundingYear());
+
+        simpleJdbcCall.execute(inParams);
+        
+    }
+
+
+    public void addDocumentPaths(DocumentsDTO docs) throws Exception{
+
+        SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate)
+                .withProcedureName("uspAddStudentDocuments");
+        System.out.println("This is the resumeURL: " + docs.getResumeURL());
+        MapSqlParameterSource inParams = new MapSqlParameterSource()
+                .addValue("StudentID", docs.getStudentID())
+                .addValue("IdCopy", docs.getIdURL())
+                .addValue("AcademicTranscript", docs.getTranscriptURL())
+                .addValue("CurriculumVitae", docs.getResumeURL());
 
         simpleJdbcCall.execute(inParams);
         

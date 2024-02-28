@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.ukukhula.bursaryapi.dto.DocumentsDTO;
 import com.ukukhula.bursaryapi.dto.NewStudentApplicationDTO;
 import com.ukukhula.bursaryapi.dto.StudentApplicationDTO;
 import com.ukukhula.bursaryapi.entities.StudentApplication;
@@ -160,6 +161,18 @@ public class StudentApplicationController {
             return ResponseEntity.ok("{\"message\": \"Student application created successfully\"}");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("{\\\"error\\\": \\\"Failed to create student application,please ensure all fields a valid\"}");
+        }
+    }
+
+
+    @PostMapping("/student-documents")
+    public ResponseEntity<?> addStudentDocuments(@RequestBody DocumentsDTO documents) {
+        try {
+            System.out.println("This is in the controller " +documents.toString());
+            studentApplicationRepository.addDocumentPaths(documents);
+            return ResponseEntity.ok("{\"message\": \"Student documents were added successfully\"}");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("{\\\"error\\\": \\\"Failed to add the documents,please try again or request a new link" + e.getMessage()+"\"}");
         }
     }
 

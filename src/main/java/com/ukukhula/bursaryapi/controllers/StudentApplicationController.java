@@ -151,9 +151,9 @@ public class StudentApplicationController {
 
     }
 
-    @PutMapping("student-application/{applicationID}")
-    public  Integer updateStudentDetails ( @RequestBody Map<String, Object> applicationDetails) {
-   
+    @PutMapping("student-application")
+    public Integer updateStudentDetails(@RequestBody Map<String, Object> applicationDetails) {
+        int applicationId = (int) applicationDetails.get("applicationId");
         String firstName = (String) applicationDetails.get("firstName");
         String lastName = (String) applicationDetails.get("lastName");
         String idNumber = (String) applicationDetails.get("idNumber");
@@ -166,13 +166,24 @@ public class StudentApplicationController {
         String reviewerComment = (String) applicationDetails.get("reviewerComment");
         String motivation = (String) applicationDetails.get("motivation");
         BigDecimal requestedAmount = new BigDecimal(String.valueOf(applicationDetails.get("requestedAmount")));
-
+        int fundingYear = (int) applicationDetails.get("fundingYear");
         String applicationStatus = (String) applicationDetails.get("applicationStatus");
 
-        return studentApplicationRepository.updateApplicationDetails(firstName, lastName, idNumber,
+        return studentApplicationRepository.updateApplicationDetails(applicationId,
+                firstName,
+                lastName,
+                idNumber,
                 gender,
-                phoneNumber, email, ethnicity, courseOfStudy, departmentName, reviewerComment, motivation,
-                requestedAmount, applicationStatus);
+                phoneNumber,
+                email,
+                ethnicity,
+                courseOfStudy,
+                departmentName,
+                reviewerComment,
+                motivation,
+                requestedAmount,
+                fundingYear,
+                applicationStatus);
     }
 
     @PostMapping("/student-application")

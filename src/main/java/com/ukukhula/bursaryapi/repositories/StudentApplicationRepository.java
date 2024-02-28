@@ -5,6 +5,7 @@ import com.ukukhula.bursaryapi.dto.StudentApplicationDTO;
 import com.ukukhula.bursaryapi.entities.StudentApplication;
 
 import java.math.BigDecimal;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -100,43 +101,29 @@ public class StudentApplicationRepository {
     }
 
     public Integer updateApplicationDetails(
-            String firstName, String lastName, String idNumber,
-            String gender, String phoneNumber, String email, String ethnicity, String courseOfStudy,
-            String departmentName, String reviewerComment, String motivation, BigDecimal requestedAmount,
+            int applicationId,
+            String firstName,
+            String lastName,
+            String idNumber,
+            String gender,
+            String phoneNumber,
+            String email,
+            String ethnicity,
+            String courseOfStudy,
+            String departmentName,
+            String reviewerComment,
+            String motivation,
+            BigDecimal requestedAmount,
+            int fundingYear,
             String applicationStatus) {
-        String UPDATE_APPLICATION_DETAILS = "{CALL UpdateStudentDetails(?,?,?,?,?,?,?,?,?,?,?,?,?)}";
-        System.out.println(
-                "\nFirst Name: " + (firstName instanceof String )+
-                        "\nLast Name: " + (lastName instanceof String) +
-                        "\nID Number: " + (idNumber instanceof String ) +
-                        "\nGender: " + (gender instanceof String) +
-                        "\nPhone Number: " + (phoneNumber instanceof String) +
-                        "\nEmail: " + email +
-                        "\nEthnicity: " + ethnicity +
-                        "\nCourse of Study: " + (courseOfStudy instanceof String) +
-                        "\nDepartment Name: " + departmentName +
-                        "\nReviewer Comment: " + reviewerComment +
-                        "\nMotivation: " + (motivation instanceof String) +
-                        "\nRequested Amount: " + requestedAmount +
-                        "\nApplication Status: " + applicationStatus);
-        Integer result = jdbcTemplate.update(UPDATE_APPLICATION_DETAILS, Integer.class, firstName,
+        String UPDATE_APPLICATION_DETAILS = "{CALL UpdateStudentDetails(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
+        Integer result = jdbcTemplate.update(UPDATE_APPLICATION_DETAILS, applicationId, firstName,
                 lastName, idNumber,
                 gender, phoneNumber, email, ethnicity, courseOfStudy,
-                departmentName, reviewerComment, motivation, requestedAmount,
+                departmentName, reviewerComment, motivation, requestedAmount, fundingYear,
                 applicationStatus);
         return result;
     }
-
-    // public interface StudentApplicationRepository extends
-    // CrudRepository<StudentApplication, Integer> {
-    // Integer updateStudentDetails(int applicationID, String firstName, String
-    // lastName, String idNumber,
-    // String gender, String phoneNumber, String email, String ethnicity, String
-    // courseOfStudy,
-    // String departmentName, String reviewerComment, String motivation, BigDecimal
-    // requestedAmount,
-    // Integer fundingYear, String applicationStatus);
-    // }
 
     public List<StudentApplication> getAllStudentsApplications() {
         final String SQL = "SELECT * FROM StudentApplication";

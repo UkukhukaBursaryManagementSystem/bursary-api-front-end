@@ -63,6 +63,15 @@ public class StudentApplicationRepository {
 
     public List<StudentApplicationDTO> getAllStudentApplicationsDTO() {
         String sql = "SELECT  " +
+
+            "ApplicationID,FirstName, LastName, IDNumber, GenderIdentity, Ethnicity, " +
+            "UniversityName, CourseOfStudy, ReviewerComment, Department, PhoneNumber,Status,HODName,FundingYear, BursaryAmount,Motivation,HeadOfDepartmentID, Email " +
+            "FROM dbo.vStudentApplications";
+    
+        return jdbcTemplate.query(sql,studentApplicationDTOMapper);
+    }
+    
+
                 "ApplicationID,FirstName, LastName, IDNumber, GenderIdentity, Ethnicity, " +
                 "UniversityName, CourseOfStudy, ReviewerComment, Department, PhoneNumber,Status,HODName,FundingYear, BursaryAmount,Motivation,HeadOfDepartmentID, Email "
                 +
@@ -93,6 +102,7 @@ public class StudentApplicationRepository {
         });
     }
 
+
     private final RowMapper<StudentApplication> studentRowMapper = ((resultSet,
             rowNumber) -> {
         return new StudentApplication(resultSet.getInt("ID"),
@@ -103,6 +113,21 @@ public class StudentApplicationRepository {
                 resultSet.getString("ReviewerComment"),
                 resultSet.getDate("Date"));
     });
+
+    public Boolean updateApplication(Long applicationID, StudentApplicationDTO updatedApplicationDTO){
+        String sql = "UPDATE StudentApplicationDTO "+
+       "SET FirstName =?, LastName= ?"+
+        " WHERE applicationID=?";
+
+        int rowsAffected = jdbcTemplate.update(sql,
+        updatedApplicationDTO.getFirstName(),
+        updatedApplicationDTO.getLastName(),
+         applicationID
+        );
+
+        return rowsAffected > 0;
+
+    }
 
     public StudentApplication findByStudentID(int studentID) {
         String SQL = "SELECT * FROM StudentApplication WHERE StudentID = ?";
@@ -182,12 +207,23 @@ public class StudentApplicationRepository {
         return studentApplications;
     }
 
+
+
     public Integer updateStudentsApplicationColumnValue(int studentID, String columnName, String value) {
 
         final String SQL = "UPDATE StudentApplication SET " + columnName + " = ? WHERE StudentID = ?";
 
         return jdbcTemplate.update(SQL, value, studentID);
     }
+
+
+    public List<StudentApplicationDTO> getStudentApplicationsDTO(long applicationId) {
+        String sql = "SELECT  " +
+            "ApplicationID,FirstName, LastName, IDNumber, GenderIdentity, Ethnicity, " +
+            "UniversityName, CourseOfStudy, ReviewerComment, Department, PhoneNumber,Status,HODName,FundingYear, BursaryAmount,Motivation,HeadOfDepartmentID, Email " +
+            "FROM dbo.vStudentApplications WHERE ApplicationID=?";
+    
+            return jdbcTemplate.query(sql,studentApplicationDTOMapper,applicationId);
 
     public Integer deleteStudentApplication(int studentId) {
         String DELETE_STUDENT_APPLICATION = "DELETE FROM StudentApplication WHERE ID = ?";
@@ -200,6 +236,7 @@ public class StudentApplicationRepository {
         }
 
         return jdbcTemplate.update(DELETE_STUDENT_APPLICATION, studentId);
+
     }
 
   
@@ -229,6 +266,7 @@ public class StudentApplicationRepository {
     }
 
 
+
     public void addDocumentPaths(DocumentsDTO docs) throws Exception{
 
         SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate)
@@ -243,5 +281,6 @@ public class StudentApplicationRepository {
         simpleJdbcCall.execute(inParams);
         
     }
+
 
 }

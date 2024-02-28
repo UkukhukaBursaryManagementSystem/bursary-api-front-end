@@ -1,20 +1,13 @@
 package com.ukukhula.bursaryapi.repositories;
 
-import com.ukukhula.bursaryapi.dto.DocumentsDTO;
 import com.ukukhula.bursaryapi.dto.NewStudentApplicationDTO;
 import com.ukukhula.bursaryapi.dto.StudentApplicationDTO;
 import com.ukukhula.bursaryapi.entities.StudentApplication;
 
-
-import java.sql.CallableStatement;
-
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,10 +18,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-import org.springframework.jdbc.core.SqlParameter;
-import org.springframework.jdbc.core.SqlOutParameter;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 
 @Repository
 public class StudentApplicationRepository {
@@ -63,15 +52,6 @@ public class StudentApplicationRepository {
 
     public List<StudentApplicationDTO> getAllStudentApplicationsDTO() {
         String sql = "SELECT  " +
-
-            "ApplicationID,FirstName, LastName, IDNumber, GenderIdentity, Ethnicity, " +
-            "UniversityName, CourseOfStudy, ReviewerComment, Department, PhoneNumber,Status,HODName,FundingYear, BursaryAmount,Motivation,HeadOfDepartmentID, Email " +
-            "FROM dbo.vStudentApplications";
-    
-        return jdbcTemplate.query(sql,studentApplicationDTOMapper);
-    }
-    
-
                 "ApplicationID,FirstName, LastName, IDNumber, GenderIdentity, Ethnicity, " +
                 "UniversityName, CourseOfStudy, ReviewerComment, Department, PhoneNumber,Status,HODName,FundingYear, BursaryAmount,Motivation,HeadOfDepartmentID, Email "
                 +
@@ -102,7 +82,6 @@ public class StudentApplicationRepository {
         });
     }
 
-
     private final RowMapper<StudentApplication> studentRowMapper = ((resultSet,
             rowNumber) -> {
         return new StudentApplication(resultSet.getInt("ID"),
@@ -113,21 +92,6 @@ public class StudentApplicationRepository {
                 resultSet.getString("ReviewerComment"),
                 resultSet.getDate("Date"));
     });
-
-    public Boolean updateApplication(Long applicationID, StudentApplicationDTO updatedApplicationDTO){
-        String sql = "UPDATE StudentApplicationDTO "+
-       "SET FirstName =?, LastName= ?"+
-        " WHERE applicationID=?";
-
-        int rowsAffected = jdbcTemplate.update(sql,
-        updatedApplicationDTO.getFirstName(),
-        updatedApplicationDTO.getLastName(),
-         applicationID
-        );
-
-        return rowsAffected > 0;
-
-    }
 
     public StudentApplication findByStudentID(int studentID) {
         String SQL = "SELECT * FROM StudentApplication WHERE StudentID = ?";
@@ -207,23 +171,12 @@ public class StudentApplicationRepository {
         return studentApplications;
     }
 
-
-
     public Integer updateStudentsApplicationColumnValue(int studentID, String columnName, String value) {
 
         final String SQL = "UPDATE StudentApplication SET " + columnName + " = ? WHERE StudentID = ?";
 
         return jdbcTemplate.update(SQL, value, studentID);
     }
-
-
-    public List<StudentApplicationDTO> getStudentApplicationsDTO(long applicationId) {
-        String sql = "SELECT  " +
-            "ApplicationID,FirstName, LastName, IDNumber, GenderIdentity, Ethnicity, " +
-            "UniversityName, CourseOfStudy, ReviewerComment, Department, PhoneNumber,Status,HODName,FundingYear, BursaryAmount,Motivation,HeadOfDepartmentID, Email " +
-            "FROM dbo.vStudentApplications WHERE ApplicationID=?";
-    
-            return jdbcTemplate.query(sql,studentApplicationDTOMapper,applicationId);
 
     public Integer deleteStudentApplication(int studentId) {
         String DELETE_STUDENT_APPLICATION = "DELETE FROM StudentApplication WHERE ID = ?";
@@ -236,51 +189,6 @@ public class StudentApplicationRepository {
         }
 
         return jdbcTemplate.update(DELETE_STUDENT_APPLICATION, studentId);
-
     }
-
-  
-    public void createApplication(NewStudentApplicationDTO application) throws Exception{
-
-        SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate)
-                .withProcedureName("uspCreateStudentWithApplication");
-        
-        MapSqlParameterSource inParams = new MapSqlParameterSource()
-                .addValue("FirstName", application.getFirstName())
-                .addValue("LastName", application.getLastName())
-                .addValue("IDNumber", application.getIDNumber())
-                .addValue("PhoneNumber", application.getPhoneNumber())
-                .addValue("Email", application.getEmail())
-                .addValue("CourseOfStudy", application.getCourseOfStudy())
-                .addValue("GenderID", application.getGenderID())
-                .addValue("EthnicityID", application.getEthnicityID())
-                .addValue("DepartmentID", application.getDepartmentID())
-                .addValue("UniversityID", application.getUniversityID())
-                .addValue("ApplicationMotivation", application.getApplicationMotivation())
-                .addValue("BursaryAmount", application.getBursaryAmount())
-                .addValue("HeadOfDepartmentID", application.getHeadOfDepartmentID())
-                .addValue("FundingYear", application.getFundingYear());
-
-        simpleJdbcCall.execute(inParams);
-        
-    }
-
-
-
-    public void addDocumentPaths(DocumentsDTO docs) throws Exception{
-
-        SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate)
-                .withProcedureName("uspAddStudentDocuments");
-        System.out.println("This is the resumeURL: " + docs.getResumeURL());
-        MapSqlParameterSource inParams = new MapSqlParameterSource()
-                .addValue("StudentID", docs.getStudentID())
-                .addValue("IdCopy", docs.getIdURL())
-                .addValue("AcademicTranscript", docs.getTranscriptURL())
-                .addValue("CurriculumVitae", docs.getResumeURL());
-
-        simpleJdbcCall.execute(inParams);
-        
-    }
-
 
 }

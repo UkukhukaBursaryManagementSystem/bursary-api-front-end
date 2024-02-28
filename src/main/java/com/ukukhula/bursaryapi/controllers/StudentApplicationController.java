@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.ukukhula.bursaryapi.dto.DocumentsDTO;
 import com.ukukhula.bursaryapi.dto.NewStudentApplicationDTO;
 import com.ukukhula.bursaryapi.dto.StudentApplicationDTO;
 import com.ukukhula.bursaryapi.entities.StudentApplication;
@@ -99,9 +98,6 @@ public class StudentApplicationController {
         }
     }
 
-
-  @PutMapping("/student/updateColumn/{studentID}")
-
     @DeleteMapping("/student/{studentId}")
     public String deleteStudentApplication(@PathVariable int studentId) {
         Integer deletedRows = studentApplicationRepository.deleteStudentApplication(studentId);
@@ -120,7 +116,6 @@ public class StudentApplicationController {
     }
 
     @PutMapping("/student/updateColumn/{studentID}")
-
     public ResponseEntity<?> updateStudentsApplicationColumnValue(@PathVariable int studentID,
             @RequestBody Map<String, String> requestBody) {
 
@@ -155,7 +150,6 @@ public class StudentApplicationController {
         }
 
     }
-
 
     @PutMapping("student-application")
     public Integer updateStudentDetails(@RequestBody Map<String, Object> applicationDetails) {
@@ -192,29 +186,9 @@ public class StudentApplicationController {
                 applicationStatus);
     }
 
-
-
     @PostMapping("/student-application")
-    public ResponseEntity<?> createStudentApp(@RequestBody NewStudentApplicationDTO application) {
+    public ResponseEntity<?> createStudentApplication(@RequestBody NewStudentApplicationDTO application) {
         try {
-
-            studentApplicationRepository.createApplication(application);
-            return ResponseEntity.ok("{\"message\": \"Student application created successfully\"}");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("{\\\"error\\\": \\\"Failed to create student application,please ensure all fields a valid\"}");
-        }
-    }
-
-
-    @PostMapping("/student-documents")
-    public ResponseEntity<?> addStudentDocuments(@RequestBody DocumentsDTO documents) {
-        try {
-            System.out.println("This is in the controller " +documents.toString());
-            studentApplicationRepository.addDocumentPaths(documents);
-            return ResponseEntity.ok("{\"message\": \"Student documents were added successfully\"}");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("{\\\"error\\\": \\\"Failed to add the documents,please try again or request a new link" + e.getMessage()+"\"}");
-
             int rowsAffected = studentApplicationRepository.insertStudentApplication(application);
             System.out.println(application);
             if (rowsAffected == 1) {
@@ -226,61 +200,17 @@ public class StudentApplicationController {
 
             return ResponseEntity.badRequest()
                     .body("{\\\"error\\\": \\\"Failed to create student application: " + e.getMessage() + "\"}");
-
         }
     }
 
     @GetMapping("/student-applications-by-hod")
     public ResponseEntity<List<StudentApplicationDTO>> getStudentApplicationsByHODName(@RequestParam String hodName) {
-
-    try {
-        List<StudentApplicationDTO> applications = studentApplicationRepository.findByHODName(hodName);
-        return new ResponseEntity<>(applications, HttpStatus.OK);
-    } catch (Exception e) {
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-}
-
-    @GetMapping("/student-application")
-    public ResponseEntity<List<StudentApplicationDTO>> getAllStudentApplicationsDTO() {
-        try {
-            List<StudentApplicationDTO> applications = studentApplicationRepository.getAllStudentApplicationsDTO();
-            return new ResponseEntity<>(applications, HttpStatus.OK);
-        } catch (Exception e) {
-         throw new RuntimeException("An error occurred while retrieving student applications", e);
-        }
-    }
-    
-    @GetMapping("student-application/{applicationId}")
-    public ResponseEntity<List<StudentApplicationDTO>> getStudentApplicationsDTO(@PathVariable long applicationId) {
-        try {
-            List<StudentApplicationDTO> applications = studentApplicationRepository.getStudentApplicationsDTO(applicationId);
-            return new ResponseEntity<>(applications, HttpStatus.OK);
-        } catch (Exception e) {
-         throw new RuntimeException("An error occurred while retrieving student applications", e);
-        }
-    }
-    
-    @PutMapping("/student-application/{applicationId}")
-    public ResponseEntity<String> updateApplication(@PathVariable Long applicationId, @RequestBody StudentApplicationDTO updatedApplicationDTO) {
-        boolean success = studentApplicationRepository.updateApplication(applicationId, updatedApplicationDTO);
-        if (success) {
-            return ResponseEntity.ok("Student application updated successfully");
-        } else {
-            return new ResponseEntity<>("Failed to update student application", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
         try {
             List<StudentApplicationDTO> applications = studentApplicationRepository.findByHODName(hodName);
             return new ResponseEntity<>(applications, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
-}
-
     }
-
 
 }

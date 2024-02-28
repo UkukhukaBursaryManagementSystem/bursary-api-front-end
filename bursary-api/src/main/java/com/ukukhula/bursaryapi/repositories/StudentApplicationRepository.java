@@ -58,30 +58,7 @@ public class StudentApplicationRepository {
             "UniversityName, CourseOfStudy, ReviewerComment, Department, PhoneNumber,Status,HODName,FundingYear, BursaryAmount,Motivation,HeadOfDepartmentID, Email " +
             "FROM dbo.vStudentApplications";
     
-        return jdbcTemplate.query(sql, (rs, rowNum) -> {
-            StudentApplicationDTO studentInfo = new StudentApplicationDTO(
-                rs.getLong("ApplicationID"),
-                rs.getString("FirstName"),
-                rs.getString("LastName"),
-                rs.getString("IDNumber"),
-                rs.getString("GenderIdentity"),
-                rs.getString("Ethnicity"),
-                rs.getString("PhoneNumber"),
-                rs.getString("Email"),
-                rs.getString("UniversityName"),
-                rs.getString("department"), 
-                rs.getString("CourseOfStudy"),
-                rs.getString("ReviewerComment"),
-                rs.getString("Motivation"), 
-                rs.getBigDecimal("BursaryAmount"), 
-                rs.getInt("FundingYear"),
-                rs.getString("Status"),
-                rs.getLong("HeadOfDepartmentID"),
-                rs.getString("HODName")
-            );
-            
-            return studentInfo;
-        });
+        return jdbcTemplate.query(sql,studentApplicationDTOMapper);
     }
     
     private final RowMapper<StudentApplication> studentRowMapper = ((resultSet,
@@ -162,30 +139,6 @@ public class StudentApplicationRepository {
         List<StudentApplicationDTO> studentApplications = jdbcTemplate.query(SQL, studentApplicationDTOMapper, HODName);
         return studentApplications;
     }
-
-    // public boolean updateStudentApplicationDTO(Long applicationId, StudentApplicationDTO updatedApplicationDTO) {
-    //     String sql = "EXEC UpdateStudentApplicationDTO ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
-    
-    //     int rowsAffected = jdbcTemplate.update(sql,
-    //             applicationId,
-    //             updatedApplicationDTO.getFirstName(),
-    //             updatedApplicationDTO.getLastName(),
-    //             updatedApplicationDTO.getIDNumber(),
-    //             updatedApplicationDTO.getGenderIdentity(),
-    //             updatedApplicationDTO.getEthnicity(),
-    //             updatedApplicationDTO.getUniversityName(),
-    //             updatedApplicationDTO.getCourseOfStudy(),
-    //             updatedApplicationDTO.getReviewerComment(),
-    //             updatedApplicationDTO.getMotivation(),
-    //             updatedApplicationDTO.getBursaryAmount(),
-    //             updatedApplicationDTO.getFundingYear(),
-    //             updatedApplicationDTO.getStatus(),
-    //             updatedApplicationDTO.getHODName(),
-    //             updatedApplicationDTO.getHeadOfDepartmentID());
-    
-    //     return rowsAffected > 0;
-    // }
-    
     
     public Integer updateStudentsApplicationColumnValue(int studentID, String columnName, String value) {
 
@@ -194,7 +147,14 @@ public class StudentApplicationRepository {
         return jdbcTemplate.update(SQL, value, studentID);
     }
 
-
+    public List<StudentApplicationDTO> getStudentApplicationsDTO(long applicationId) {
+        String sql = "SELECT  " +
+            "ApplicationID,FirstName, LastName, IDNumber, GenderIdentity, Ethnicity, " +
+            "UniversityName, CourseOfStudy, ReviewerComment, Department, PhoneNumber,Status,HODName,FundingYear, BursaryAmount,Motivation,HeadOfDepartmentID, Email " +
+            "FROM dbo.vStudentApplications WHERE ApplicationID=?";
+    
+            return jdbcTemplate.query(sql,studentApplicationDTOMapper,applicationId);
+    }
 
 
 }

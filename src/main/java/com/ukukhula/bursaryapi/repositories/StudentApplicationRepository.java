@@ -1,5 +1,6 @@
 package com.ukukhula.bursaryapi.repositories;
 
+import com.ukukhula.bursaryapi.dto.DocumentsDTO;
 import com.ukukhula.bursaryapi.dto.NewStudentApplicationDTO;
 import com.ukukhula.bursaryapi.dto.StudentApplicationDTO;
 import com.ukukhula.bursaryapi.entities.StudentApplication;
@@ -18,6 +19,8 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 
 @Repository
 public class StudentApplicationRepository {
@@ -189,6 +192,47 @@ public class StudentApplicationRepository {
         }
 
         return jdbcTemplate.update(DELETE_STUDENT_APPLICATION, studentId);
+    }
+
+    
+    public void createApplication(NewStudentApplicationDTO application) throws Exception{
+
+        SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate)
+                .withProcedureName("uspCreateStudentWithApplication");
+        
+        MapSqlParameterSource inParams = new MapSqlParameterSource()
+                .addValue("FirstName", application.getFirstName())
+                .addValue("LastName", application.getLastName())
+                .addValue("IDNumber", application.getIDNumber())
+                .addValue("PhoneNumber", application.getPhoneNumber())
+                .addValue("Email", application.getEmail())
+                .addValue("CourseOfStudy", application.getCourseOfStudy())
+                .addValue("GenderID", application.getGenderID())
+                .addValue("EthnicityID", application.getEthnicityID())
+                .addValue("DepartmentID", application.getDepartmentID())
+                .addValue("UniversityID", application.getUniversityID())
+                .addValue("ApplicationMotivation", application.getApplicationMotivation())
+                .addValue("BursaryAmount", application.getBursaryAmount())
+                .addValue("HeadOfDepartmentID", application.getHeadOfDepartmentID())
+                .addValue("FundingYear", application.getFundingYear());
+
+        simpleJdbcCall.execute(inParams);
+        
+    }
+
+
+    public void addDocumentPaths(DocumentsDTO docs) throws Exception{
+
+        SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate)
+                .withProcedureName("uspAddStudentDocuments");
+        MapSqlParameterSource inParams = new MapSqlParameterSource()
+                .addValue("StudentID", docs.getStudentID())
+                .addValue("IdCopy", docs.getIdURL())
+                .addValue("AcademicTranscript", docs.getTranscriptURL())
+                .addValue("CurriculumVitae", docs.getResumeURL());
+
+        simpleJdbcCall.execute(inParams);
+        
     }
 
 }

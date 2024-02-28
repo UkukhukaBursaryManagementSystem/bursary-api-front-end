@@ -1,5 +1,5 @@
-CREATE PROCEDURE UpdateStudentDetails
-    @StudentID INT,
+CREATE OR ALTER PROCEDURE UpdateStudentDetails
+    @ApplicationID INT,
     @FirstName VARCHAR(50),
     @LastName VARCHAR(50),
     @IDNumber CHAR(13),
@@ -18,23 +18,25 @@ CREATE PROCEDURE UpdateStudentDetails
 AS
 BEGIN
     SET NOCOUNT ON;
+    DECLARE @StudentID INT;
+
+    SELECT @StudentID = StudentID FROM [dbo].[StudentApplication] WHERE ID = @ApplicationID;
+
 
     BEGIN TRY
         BEGIN TRANSACTION;
 
-        -- Update User table
         UPDATE [dbo].[User]
         SET FirstName = @FirstName,
             LastName = @LastName
         WHERE ID = (SELECT UserID FROM [dbo].[Student] WHERE ID = @StudentID);
 
-        -- Update Contact table
         UPDATE [dbo].[Contact]
         SET PhoneNumber = @PhoneNumber,
             Email = @Email
         WHERE ID = (SELECT ContactID FROM [dbo].[User] WHERE ID = (SELECT UserID FROM [dbo].[Student] WHERE ID = @StudentID));
 
-        -- Update Student table
+
         UPDATE [dbo].[Student]
         SET IDNumber = @IDNumber,
             GenderID = (SELECT ID FROM [dbo].[Gender] WHERE [Identity] = @Gender),
@@ -43,7 +45,7 @@ BEGIN
             CourseOfStudy = @CourseOfStudy
         WHERE ID = @StudentID;
 
-        -- Update StudentApplication table
+
         UPDATE [dbo].[StudentApplication]
         SET ReviewerComment = @ReviewerComment,
             Motivation = @Motivation,

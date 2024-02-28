@@ -166,6 +166,16 @@ public class StudentApplicationController {
         }
     }
     
+    @GetMapping("student-application/{applicationId}")
+    public ResponseEntity<List<StudentApplicationDTO>> getStudentApplicationsDTO(@PathVariable long applicationId) {
+        try {
+            List<StudentApplicationDTO> applications = studentApplicationRepository.getStudentApplicationsDTO(applicationId);
+            return new ResponseEntity<>(applications, HttpStatus.OK);
+        } catch (Exception e) {
+         throw new RuntimeException("An error occurred while retrieving student applications", e);
+        }
+    }
+    
     @PutMapping("/student-application/{applicationId}")
     public ResponseEntity<String> updateApplication(@PathVariable Long applicationId, @RequestBody StudentApplicationDTO updatedApplicationDTO) {
         boolean success = studentApplicationRepository.updateApplication(applicationId, updatedApplicationDTO);

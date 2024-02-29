@@ -69,11 +69,18 @@ public class UniversityController {
     return universityRepository.getUniversityBalance(universityName);
   }
 
+  @GetMapping("/total-student-allocations")
+  public BigDecimal getUniversityTotalSpent(@RequestParam Map<String, Object> allocationDetails) {
+    String universityName = (String) allocationDetails.get("universityName");
+    return universityRepository.getUniversityTotalSpent(universityName);
+  }
+
   @GetMapping("/hod")
   public List<HeadOfDepartment> allHeadDepartments() {
 
     return universityRepository.getAllHeadOfDepartments();
   }
+
   @GetMapping("/ethnicity")
   public List<Ethnicity> allEthnicities() {
 

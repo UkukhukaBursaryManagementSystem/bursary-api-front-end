@@ -102,11 +102,4 @@ public class UniversityAllocationRepository {
             throw new RuntimeException("Error retrieving total spent for year: " + year, e);
         }
     }
-
-    public Integer getUniversityBalance(String universityName, int year) {
-        final String GET_UNIVERSITY_BALANCE = "SELECT DBO.GetRemainingUniversityFunds(? ,?)";
-        int currentYear = Year.now().getValue();
-        return jdbcTemplate.queryForObject(GET_UNIVERSITY_BALANCE, Integer.class, universityName, currentYear);
-    }
-
 }

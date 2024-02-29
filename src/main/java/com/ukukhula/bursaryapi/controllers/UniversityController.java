@@ -8,6 +8,7 @@ import com.ukukhula.bursaryapi.entities.Gender;
 import com.ukukhula.bursaryapi.entities.HeadOfDepartment;
 import com.ukukhula.bursaryapi.entities.University;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -19,6 +20,8 @@ import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.ukukhula.bursaryapi.repositories.UniversityRepository;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -60,6 +63,11 @@ public class UniversityController {
     return universityRepository.getAllDepartments();
   }
 
+  @GetMapping("/balance")
+  public BigDecimal getUniversityBalance(@RequestParam Map<String, Object> allocationDetails) {
+    String universityName = (String) allocationDetails.get("universityName");
+    return universityRepository.getUniversityBalance(universityName);
+  }
 
   @GetMapping("/hod")
   public List<HeadOfDepartment> allHeadDepartments() {

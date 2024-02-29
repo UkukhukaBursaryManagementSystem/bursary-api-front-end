@@ -1,6 +1,7 @@
 
 package com.ukukhula.bursaryapi.repositories;
 
+import com.ukukhula.bursaryapi.entities.University;
 import com.ukukhula.bursaryapi.entities.UniversityAllocation;
 
 import java.math.BigDecimal;
@@ -38,7 +39,6 @@ public class UniversityAllocationRepository {
     public Integer allocateFundsToAllUniversities() {
         String COUNT_APPROVED_UNIVERSITIES = "SELECT dbo.GetApprovedUniversityCount()";
         String ALLOCATE_FUNDS_EVENLY = "{CALL InsertUniversityAllocations(?)}";
-  
 
         Year year = Year.now();
         int intYear = year.getValue();
@@ -54,7 +54,7 @@ public class UniversityAllocationRepository {
             if (availableBalance.compareTo(BigDecimal.ZERO) == 0) {
                 throw new IllegalStateException("Admin balance is 0. No funds available for allocation.");
             }
-            return jdbcTemplate.update(ALLOCATE_FUNDS_EVENLY,2024);
+            return jdbcTemplate.update(ALLOCATE_FUNDS_EVENLY, 2024);
         } catch (RuntimeException e) {
 
             throw e;
@@ -102,4 +102,11 @@ public class UniversityAllocationRepository {
             throw new RuntimeException("Error retrieving total spent for year: " + year, e);
         }
     }
+
+    public Integer getUniversityBalance(String universityName, int year) {
+        final String GET_UNIVERSITY_BALANCE = "SELECT DBO.GetRemainingUniversityFunds(? ,?)";
+        int currentYear = Year.now().getValue();
+        return jdbcTemplate.queryForObject(GET_UNIVERSITY_BALANCE, Integer.class, universityName, currentYear);
+    }
+
 }

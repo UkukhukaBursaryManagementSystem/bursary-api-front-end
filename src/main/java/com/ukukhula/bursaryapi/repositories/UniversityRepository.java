@@ -1,7 +1,9 @@
 package com.ukukhula.bursaryapi.repositories;
 
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.time.Year;
 import java.util.List;
 import java.util.Objects;
 
@@ -71,6 +73,13 @@ public class UniversityRepository {
     } catch (Exception e) {
       throw new RuntimeException("Unexpected error occurred");
     }
+  }
+
+  public BigDecimal getUniversityBalance(String universityName) {
+    final String GET_UNIVERSITY_BALANCE = "SELECT DBO.GetRemainingUniversityFunds(? ,?)";
+    int currentYear = Year.now().getValue();
+    return jdbcTemplate.queryForObject(GET_UNIVERSITY_BALANCE, BigDecimal.class, universityName, currentYear);
+
   }
 
   public List<University> getAllUniversities() {

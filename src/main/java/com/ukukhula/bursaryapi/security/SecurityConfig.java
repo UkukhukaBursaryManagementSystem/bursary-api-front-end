@@ -40,9 +40,8 @@ public class SecurityConfig
                 .securityMatcher("/*")
                 .cors(cors -> corsConfigurationSource())
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/auth/login").permitAll()
-                        .anyRequest().authenticated())
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class).build();
+                        .requestMatchers("/*").permitAll())
+                        .build();
     }
 }
 

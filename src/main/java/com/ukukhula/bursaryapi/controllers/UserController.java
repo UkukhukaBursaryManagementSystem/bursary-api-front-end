@@ -29,6 +29,7 @@ public class UserController
     }
 
     @GetMapping("/user/{email}")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public ResponseEntity<User> getUserByEmail(@PathVariable String email) {
         User user = userRepository.getUserByEmail(email);
         return user != null ? ResponseEntity.ok(user) : ResponseEntity.notFound().build();

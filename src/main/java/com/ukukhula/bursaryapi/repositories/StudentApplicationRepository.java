@@ -85,6 +85,41 @@ public class StudentApplicationRepository {
         });
     }
 
+    // public List<StudentApplicationDTO> getStudentApplicationByIdDTO(int
+    // applicationId) {
+    // String sql = "SELECT " +
+    // "ApplicationID,FirstName, LastName, IDNumber, GenderIdentity, Ethnicity, " +
+    // "UniversityName, CourseOfStudy, ReviewerComment, Department,
+    // PhoneNumber,Status,HODName,FundingYear,
+    // BursaryAmount,Motivation,HeadOfDepartmentID, Email "
+    // +
+    // "FROM dbo.vStudentApplications WHERE applicationID = ?";
+
+    // return jdbcTemplate.query(sql, (rs, rowNum) -> {
+    // StudentApplicationDTO studentInfo = new StudentApplicationDTO(
+    // rs.getLong("ApplicationID"),
+    // rs.getString("FirstName"),
+    // rs.getString("LastName"),
+    // rs.getString("IDNumber"),
+    // rs.getString("GenderIdentity"),
+    // rs.getString("Ethnicity"),
+    // rs.getString("PhoneNumber"),
+    // rs.getString("Email"),
+    // rs.getString("UniversityName"),
+    // rs.getString("department"),
+    // rs.getString("CourseOfStudy"),
+    // rs.getString("ReviewerComment"),
+    // rs.getString("Motivation"),
+    // rs.getBigDecimal("BursaryAmount"),
+    // rs.getInt("FundingYear"),
+    // rs.getString("Status"),
+    // rs.getLong("HeadOfDepartmentID"),
+    // rs.getString("HODName"));
+
+    // return studentInfo;
+    // });
+    // }
+
     private final RowMapper<StudentApplication> studentRowMapper = ((resultSet,
             rowNumber) -> {
         return new StudentApplication(resultSet.getInt("ID"),
@@ -194,12 +229,11 @@ public class StudentApplicationRepository {
         return jdbcTemplate.update(DELETE_STUDENT_APPLICATION, studentId);
     }
 
-    
-    public void createApplication(NewStudentApplicationDTO application) throws Exception{
+    public void createApplication(NewStudentApplicationDTO application) throws Exception {
 
         SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate)
                 .withProcedureName("uspCreateStudentWithApplication");
-        
+
         MapSqlParameterSource inParams = new MapSqlParameterSource()
                 .addValue("FirstName", application.getFirstName())
                 .addValue("LastName", application.getLastName())
@@ -217,11 +251,10 @@ public class StudentApplicationRepository {
                 .addValue("FundingYear", application.getFundingYear());
 
         simpleJdbcCall.execute(inParams);
-        
+
     }
 
-
-    public void addDocumentPaths(DocumentsDTO docs) throws Exception{
+    public void addDocumentPaths(DocumentsDTO docs) throws Exception {
 
         SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate)
                 .withProcedureName("uspAddStudentDocuments");
@@ -232,7 +265,7 @@ public class StudentApplicationRepository {
                 .addValue("CurriculumVitae", docs.getResumeURL());
 
         simpleJdbcCall.execute(inParams);
-        
+
     }
 
 }

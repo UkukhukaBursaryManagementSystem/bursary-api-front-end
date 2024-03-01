@@ -116,6 +116,19 @@ public class StudentApplicationController {
         }
     }
 
+    // @GetMapping("/student-application/{applicationId}")
+    // public ResponseEntity<List<StudentApplicationDTO>>
+    // getStudentApplicationByIdDTO(@PathVariable int applicationId) {
+    // try {
+    // List<StudentApplicationDTO> studentInfo = studentApplicationRepository
+    // .getStudentApplicationByIdDTO(applicationId);
+    // return new ResponseEntity<>(studentInfo, HttpStatus.OK);
+    // } catch (Exception e) {
+    // throw new RuntimeException("An error occurred while retrieving student
+    // application", e);
+    // }
+    // }
+
     @PutMapping("/student/updateColumn/{studentID}")
     public ResponseEntity<?> updateStudentsApplicationColumnValue(@PathVariable int studentID,
             @RequestBody Map<String, String> requestBody) {
@@ -187,14 +200,14 @@ public class StudentApplicationController {
                 applicationStatus);
     }
 
-
     @PostMapping("/create-student-application")
     public ResponseEntity<?> createStudentApp(@RequestBody NewStudentApplicationDTO application) {
         try {
             studentApplicationRepository.createApplication(application);
             return ResponseEntity.ok("{\"message\": \"Student application created successfully\"}");
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("{\\\"error\\\": \\\"Failed to create student application,please ensure all fields a valid\"}");
+            return ResponseEntity.badRequest().body(
+                    "{\\\"error\\\": \\\"Failed to create student application,please ensure all fields a valid\"}");
         }
     }
 
@@ -204,7 +217,9 @@ public class StudentApplicationController {
             studentApplicationRepository.addDocumentPaths(documents);
             return ResponseEntity.ok("{\"message\": \"Student documents were added successfully\"}");
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("{\\\"error\\\": \\\"Failed to add the documents,please try again or request a new link" + e.getMessage()+"\"}");
+            return ResponseEntity.badRequest()
+                    .body("{\\\"error\\\": \\\"Failed to add the documents,please try again or request a new link"
+                            + e.getMessage() + "\"}");
         }
     }
 

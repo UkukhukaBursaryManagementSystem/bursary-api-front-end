@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserController
 {
     private final UserRepository userRepository;
@@ -28,8 +27,8 @@ public class UserController
         this.userRepository = userRepository;
     }
 
-    @GetMapping("/user/{email}")
     @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @GetMapping("/user/{email}")
     public ResponseEntity<User> getUserByEmail(@PathVariable String email) {
         User user = userRepository.getUserByEmail(email);
         return user != null ? ResponseEntity.ok(user) : ResponseEntity.notFound().build();

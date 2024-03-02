@@ -77,4 +77,11 @@ public class UniversityController {
 
     return universityRepository.getAllGenders();
   }
+
+  @GetMapping("/universities/{status}")
+  public List<University> getUniversitiesByStatus(int status)
+  {
+
+    return universityRepository.getUniveristiesByApplicationStatus(status);
+  };
 }

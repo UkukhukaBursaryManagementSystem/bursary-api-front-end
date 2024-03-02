@@ -27,7 +27,11 @@ public class UniversityRepository {
       "uspGetUniversityById(?)}";
   private static final String GET_ALL_UNIVERSITIES = "SELECT ID, UniversityName FROM University";
 
-
+  private static final String GET_UNIVERSITIES_BY_STATUS = "SELECT UA.UniversityID, " +
+          "U.UniversityName, UA.StatusID\n" +
+          "FROM UniversityApplication UA\n" +
+          "JOIN University U ON UA.UniversityID = U.ID\n" +
+          "WHERE UA.StatusID = ?;";
   private static final String GET_ALL_DEPARTMENTS = "SELECT ID, Name FROM Department";
 
   private static final String GET_ALL_HODs = "SELECT ID, Name from vHeadOFDepartments";
@@ -125,6 +129,18 @@ public class UniversityRepository {
       throw new RuntimeException("Unexpected error occurred", e);
     }
   }
+
+  public List<University> getUniveristiesByApplicationStatus(int status)
+  {
+    try {
+      return jdbcTemplate.query(GET_UNIVERSITIES_BY_STATUS, universityRowMapper);
+    } catch (EmptyResultDataAccessException e) {
+      throw new RuntimeException("No University found with status" + status);
+    } catch (Exception e) {
+      throw new RuntimeException("Unexpected error occurred", e);
+    }
+  }
+
 
   private final RowMapper<University> universityRowMapper = ((resultSet,
       rowNumber) -> new University(resultSet.getInt("ID"),

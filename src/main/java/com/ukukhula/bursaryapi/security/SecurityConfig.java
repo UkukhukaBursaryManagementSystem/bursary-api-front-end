@@ -7,6 +7,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -25,10 +26,11 @@ public class SecurityConfig
         return http
                 .cors(Customizer.withDefaults())
                 .securityMatcher("/**")
+                .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/").permitAll()
-                        .requestMatchers("/auth/login")
-                        .permitAll()
+                        .requestMatchers("/auth/login").permitAll()
+                        .requestMatchers("/user/**").permitAll()
+                        .requestMatchers("/requestAccess").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

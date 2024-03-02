@@ -29,6 +29,11 @@ public class UniversityApplicationRepository {
 
         return result;
 
+    public Integer addUniversityApplicationByAdmin(String universityName) {
+        String INSERT_UNIVERSITY = "INSERT INTO University (UniversityName) VALUES (?)";
+        String ADD_APPLICATION = "{CALL dbo.CreateAdminUniversityApplication(?)}";
+        jdbcTemplate.update(INSERT_UNIVERSITY, universityName);
+        return jdbcTemplate.update(ADD_APPLICATION, universityName);
     }
 
     public List<UniversityApplication> getAllUniversityApplications() throws Exception {

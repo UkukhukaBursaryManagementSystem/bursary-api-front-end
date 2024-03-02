@@ -35,6 +35,45 @@ public class StudentApplicationRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+
+    private final RowMapper<StudentApplicationDTO> studentApplicationDTOMapper = new RowMapper<StudentApplicationDTO>() {
+        @Override
+        public StudentApplicationDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+            StudentApplicationDTO dto = new StudentApplicationDTO(
+                    rs.getLong("ApplicationID"),
+                    rs.getString("FirstName"),
+                    rs.getString("LastName"),
+                    rs.getString("IDNumber"),
+                    rs.getString("GenderIdentity"),
+                    rs.getString("Ethnicity"),
+                    rs.getString("PhoneNumber"),
+                    rs.getString("Email"),
+                    rs.getString("UniversityName"),
+                    rs.getString("department"),
+                    rs.getString("CourseOfStudy"),
+                    rs.getString("ReviewerComment"),
+                    rs.getString("Motivation"),
+                    rs.getBigDecimal("BursaryAmount"),
+                    rs.getInt("FundingYear"),
+                    rs.getString("Status"),
+                    rs.getLong("HeadOfDepartmentID"),
+                    rs.getString("HODName"));
+
+            return dto;
+        }
+    };
+
+    private final RowMapper<StudentApplication> studentRowMapper = ((resultSet,
+            rowNumber) -> {
+        return new StudentApplication(resultSet.getInt("ID"),
+                resultSet.getInt("StudentID"),
+                resultSet.getString("Motivation"),
+                resultSet.getBigDecimal("BursaryAmount"),
+                resultSet.getString("StatusId"),
+                resultSet.getString("ReviewerComment"),
+                resultSet.getDate("Date"));
+    });
+
     public int insertStudentApplication(NewStudentApplicationDTO application) throws SQLException {
         return jdbcTemplate.update(INSERT_STUDENT_APPLICATION,
                 application.getFirstName(),
@@ -60,76 +99,14 @@ public class StudentApplicationRepository {
                 +
                 "FROM dbo.vStudentApplications";
 
-        return jdbcTemplate.query(sql, (rs, rowNum) -> {
-            StudentApplicationDTO studentInfo = new StudentApplicationDTO(
-                    rs.getLong("ApplicationID"),
-                    rs.getString("FirstName"),
-                    rs.getString("LastName"),
-                    rs.getString("IDNumber"),
-                    rs.getString("GenderIdentity"),
-                    rs.getString("Ethnicity"),
-                    rs.getString("PhoneNumber"),
-                    rs.getString("Email"),
-                    rs.getString("UniversityName"),
-                    rs.getString("department"),
-                    rs.getString("CourseOfStudy"),
-                    rs.getString("ReviewerComment"),
-                    rs.getString("Motivation"),
-                    rs.getBigDecimal("BursaryAmount"),
-                    rs.getInt("FundingYear"),
-                    rs.getString("Status"),
-                    rs.getLong("HeadOfDepartmentID"),
-                    rs.getString("HODName"));
-
-            return studentInfo;
-        });
+        return jdbcTemplate.query(sql, studentApplicationDTOMapper);
     }
 
-    // public List<StudentApplicationDTO> getStudentApplicationByIdDTO(int
-    // applicationId) {
-    // String sql = "SELECT " +
-    // "ApplicationID,FirstName, LastName, IDNumber, GenderIdentity, Ethnicity, " +
-    // "UniversityName, CourseOfStudy, ReviewerComment, Department,
-    // PhoneNumber,Status,HODName,FundingYear,
-    // BursaryAmount,Motivation,HeadOfDepartmentID, Email "
-    // +
-    // "FROM dbo.vStudentApplications WHERE applicationID = ?";
-
-    // return jdbcTemplate.query(sql, (rs, rowNum) -> {
-    // StudentApplicationDTO studentInfo = new StudentApplicationDTO(
-    // rs.getLong("ApplicationID"),
-    // rs.getString("FirstName"),
-    // rs.getString("LastName"),
-    // rs.getString("IDNumber"),
-    // rs.getString("GenderIdentity"),
-    // rs.getString("Ethnicity"),
-    // rs.getString("PhoneNumber"),
-    // rs.getString("Email"),
-    // rs.getString("UniversityName"),
-    // rs.getString("department"),
-    // rs.getString("CourseOfStudy"),
-    // rs.getString("ReviewerComment"),
-    // rs.getString("Motivation"),
-    // rs.getBigDecimal("BursaryAmount"),
-    // rs.getInt("FundingYear"),
-    // rs.getString("Status"),
-    // rs.getLong("HeadOfDepartmentID"),
-    // rs.getString("HODName"));
-
-    // return studentInfo;
-    // });
-    // }
-
-    private final RowMapper<StudentApplication> studentRowMapper = ((resultSet,
-            rowNumber) -> {
-        return new StudentApplication(resultSet.getInt("ID"),
-                resultSet.getInt("StudentID"),
-                resultSet.getString("Motivation"),
-                resultSet.getBigDecimal("BursaryAmount"),
-                resultSet.getString("StatusId"),
-                resultSet.getString("ReviewerComment"),
-                resultSet.getDate("Date"));
-    });
+    public StudentApplicationDTO getStudentApplicationById(Long applicationId) {
+        String query = "SELECT * FROM vStudentApplications WHERE applicationID = ?";
+        List<StudentApplicationDTO> results = jdbcTemplate.query(query, studentApplicationDTOMapper, applicationId);
+        return results.isEmpty() ? null : results.get(0);
+    }
 
     public StudentApplication findByStudentID(int studentID) {
         String SQL = "SELECT * FROM StudentApplication WHERE StudentID = ?";
@@ -175,33 +152,6 @@ public class StudentApplicationRepository {
 
         return jdbcTemplate.update(SQL, status, studentID);
     }
-
-    private final RowMapper<StudentApplicationDTO> studentApplicationDTOMapper = new RowMapper<StudentApplicationDTO>() {
-        @Override
-        public StudentApplicationDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
-            StudentApplicationDTO dto = new StudentApplicationDTO(
-                    rs.getLong("ApplicationID"),
-                    rs.getString("FirstName"),
-                    rs.getString("LastName"),
-                    rs.getString("IDNumber"),
-                    rs.getString("GenderIdentity"),
-                    rs.getString("Ethnicity"),
-                    rs.getString("PhoneNumber"),
-                    rs.getString("Email"),
-                    rs.getString("UniversityName"),
-                    rs.getString("department"),
-                    rs.getString("CourseOfStudy"),
-                    rs.getString("ReviewerComment"),
-                    rs.getString("Motivation"),
-                    rs.getBigDecimal("BursaryAmount"),
-                    rs.getInt("FundingYear"),
-                    rs.getString("Status"),
-                    rs.getLong("HeadOfDepartmentID"),
-                    rs.getString("HODName"));
-
-            return dto;
-        }
-    };
 
     public List<StudentApplicationDTO> findByHODName(String HODName) {
         String SQL = "SELECT ApplicationID, FirstName, LastName, IDNumber, GenderIdentity, Ethnicity, PhoneNumber, Email, UniversityName, department, CourseOfStudy, ReviewerComment, Motivation, BursaryAmount, FundingYear, Status, HeadOfDepartmentID, HODName FROM vStudentApplications WHERE HODName = ?";

@@ -1,12 +1,8 @@
 package com.ukukhula.bursaryapi.repositories;
 
-import com.ukukhula.bursaryapi.entities.UniversityAllocation;
 import com.ukukhula.bursaryapi.entities.UniversityApplication;
-
 import java.util.List;
 
-import org.springframework.dao.DataAccessException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -28,6 +24,7 @@ public class UniversityApplicationRepository {
                 universityApplicationRowMapper, universityName);
 
         return result;
+    }
 
     public Integer addUniversityApplicationByAdmin(String universityName) {
         String INSERT_UNIVERSITY = "INSERT INTO University (UniversityName) VALUES (?)";

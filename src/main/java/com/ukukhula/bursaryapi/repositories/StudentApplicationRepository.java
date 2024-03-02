@@ -35,7 +35,6 @@ public class StudentApplicationRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-
     private final RowMapper<StudentApplicationDTO> studentApplicationDTOMapper = new RowMapper<StudentApplicationDTO>() {
         @Override
         public StudentApplicationDTO mapRow(ResultSet rs, int rowNum) throws SQLException {

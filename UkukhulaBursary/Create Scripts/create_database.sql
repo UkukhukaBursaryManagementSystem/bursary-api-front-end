@@ -195,7 +195,7 @@ GO
 
 
 ALTER TABLE [dbo].[StudentApplication]
-ADD CONSTRAINT [FK_HeadOfDepartmentID] FOREIGN KEY(HeadOfDepartmentID) REFERENCES [dbo].[UniversityApplication](ID)
+ADD CONSTRAINT [FK_HeadOfDepartmentID] FOREIGN KEY(HeadOfDepartmentID) REFERENCES [dbo].[UniversityRepresentative](ID)
 GO
 
 ALTER TABLE [dbo].[StudentDocuments]

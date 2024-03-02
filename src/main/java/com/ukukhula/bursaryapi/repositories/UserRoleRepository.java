@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public class  UserRoleRepository {
+public class UserRoleRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -25,7 +25,12 @@ public class  UserRoleRepository {
         return userRole.getRole();
     }
 
+    public String getUserRole(int userId) {
+        String GET_USER_ROLE = "SELECT UserRole FROM UserWithRoles WHERE ID =?";
+        return jdbcTemplate.queryForObject(GET_USER_ROLE, String.class, userId);
+    }
+
     private final RowMapper<UserRole> userRoleRowMapper = ((resultSet,
-    rowNumber) -> new UserRole(resultSet.getInt("ID"), resultSet.getString(
-            "Role")));
+            rowNumber) -> new UserRole(resultSet.getInt("ID"), resultSet.getString(
+                    "Role")));
 }

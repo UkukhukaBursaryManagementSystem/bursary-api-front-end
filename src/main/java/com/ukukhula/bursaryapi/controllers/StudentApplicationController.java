@@ -1,15 +1,9 @@
 package com.ukukhula.bursaryapi.controllers;
 
 import java.math.BigDecimal;
-import java.sql.SQLDataException;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-import org.springframework.dao.DataAccessException;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -26,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.ukukhula.bursaryapi.dto.ApplicationReviewDTO;
 import com.ukukhula.bursaryapi.dto.DocumentsDTO;
 import com.ukukhula.bursaryapi.dto.NewStudentApplicationDTO;
 import com.ukukhula.bursaryapi.dto.StudentApplicationDTO;
@@ -208,6 +203,7 @@ public class StudentApplicationController {
         }
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/student-applications-by-hod")
     public ResponseEntity<List<StudentApplicationDTO>> getStudentApplicationsByHODName(@RequestParam String hodName) {
         try {
@@ -215,6 +211,29 @@ public class StudentApplicationController {
             return new ResponseEntity<>(applications, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PostMapping("/student/review-student")
+    public ResponseEntity<?> reviewStudentApp(@RequestBody ApplicationReviewDTO applicationReview) {
+        try {
+            System.out.println(applicationReview);
+            studentApplicationRepository.reviewApplication(applicationReview,"student");
+            return ResponseEntity.ok("{\"message\": \"Student application review done successfully\"}");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("{\\\"error\\\": \\\"Failed to add review for student application.\"}");
+        }
+    }
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PostMapping("/university/review-university")
+    public ResponseEntity<?> reviewUniversityApp(@RequestBody ApplicationReviewDTO applicationReview) {
+        try {
+            studentApplicationRepository.reviewApplication(applicationReview,"university");;
+            return ResponseEntity.ok("{\"message\": \"University application review done successfully\"}");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("{\\\"error\\\": \\\"Failed to add review for university application.\"}");
         }
     }
 

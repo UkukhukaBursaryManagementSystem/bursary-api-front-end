@@ -116,18 +116,10 @@ public class StudentApplicationController {
         }
     }
 
-    // @GetMapping("/student-application/{applicationId}")
-    // public ResponseEntity<List<StudentApplicationDTO>>
-    // getStudentApplicationByIdDTO(@PathVariable int applicationId) {
-    // try {
-    // List<StudentApplicationDTO> studentInfo = studentApplicationRepository
-    // .getStudentApplicationByIdDTO(applicationId);
-    // return new ResponseEntity<>(studentInfo, HttpStatus.OK);
-    // } catch (Exception e) {
-    // throw new RuntimeException("An error occurred while retrieving student
-    // application", e);
-    // }
-    // }
+    @GetMapping("/student-application/{applicationId}")
+    public StudentApplicationDTO getStudentApplicationById(@PathVariable Long applicationId) {
+        return studentApplicationRepository.getStudentApplicationById(applicationId);
+    }
 
     @PutMapping("/student/updateColumn/{studentID}")
     public ResponseEntity<?> updateStudentsApplicationColumnValue(@PathVariable int studentID,

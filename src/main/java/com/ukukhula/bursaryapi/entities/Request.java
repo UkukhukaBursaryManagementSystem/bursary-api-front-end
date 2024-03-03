@@ -13,7 +13,7 @@ public class Request {
     private final String lastName;
     private final String phoneNumber;
     private final String email;
-    private final String department;
-    private final String universityName;
+    private final int department;
+    private final int universityName;
 
 }

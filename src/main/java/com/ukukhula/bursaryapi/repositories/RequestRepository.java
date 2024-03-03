@@ -25,8 +25,8 @@ public class RequestRepository {
                 resultSet.getString("lastName"),
                 resultSet.getString("phoneNumber"),
                 resultSet.getString("email"),
-                resultSet.getString("department"),
-                resultSet.getString("university")
+                resultSet.getInt("department"),
+                resultSet.getInt("university")
         );
     });
 

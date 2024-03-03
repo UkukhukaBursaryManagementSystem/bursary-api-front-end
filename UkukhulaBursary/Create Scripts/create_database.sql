@@ -90,7 +90,7 @@ GO
 CREATE TABLE [dbo].[StudentDocuments]
 (
   [ID] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-  [StudentID] INT NOT NULL,
+  [StudentID] INT UNIQUE NOT NULL,
   [IdCopy] VARCHAR(MAX) NOT NULL,
   [AcademicTranscript] VARCHAR(MAX) NOT NULL,
   [CurriculumVitae] VARCHAR(MAX) NOT NULL,
@@ -195,7 +195,7 @@ GO
 
 
 ALTER TABLE [dbo].[StudentApplication]
-ADD CONSTRAINT [FK_HeadOfDepartmentID] FOREIGN KEY(HeadOfDepartmentID) REFERENCES [dbo].[UniversityApplication](ID)
+ADD CONSTRAINT [FK_HeadOfDepartmentID] FOREIGN KEY(HeadOfDepartmentID) REFERENCES [dbo].[UniversityRepresentative](ID)
 GO
 
 ALTER TABLE [dbo].[StudentDocuments]

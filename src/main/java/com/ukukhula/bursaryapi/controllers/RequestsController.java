@@ -1,6 +1,7 @@
 package com.ukukhula.bursaryapi.controllers;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -8,6 +9,7 @@ import com.ukukhula.bursaryapi.entities.Request;
 import com.ukukhula.bursaryapi.repositories.RequestRepository;
 
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class RequestsController {
 
     private RequestRepository requestRepository;

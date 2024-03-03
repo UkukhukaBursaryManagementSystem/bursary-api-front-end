@@ -5,7 +5,9 @@ import com.ukukhula.bursaryapi.entities.University;
 import com.ukukhula.bursaryapi.entities.UniversityApplication;
 import com.ukukhula.bursaryapi.repositories.UniversityApplicationRepository;
 
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -16,13 +18,14 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UniversityApplicationController {
-
+    @Autowired
     final UniversityApplicationRepository universityApplicationRepository;
 
     public UniversityApplicationController(UniversityApplicationRepository universityApplicationRepository) {
@@ -53,5 +56,10 @@ public class UniversityApplicationController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error");
         }
+    }
+
+    @PostMapping("university-by-admin")
+    public Integer addUniversityApplicationByAdmin(@RequestParam String universityName) {
+        return universityApplicationRepository.addUniversityApplicationByAdmin(universityName);
     }
 }

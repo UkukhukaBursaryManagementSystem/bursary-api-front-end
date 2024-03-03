@@ -20,6 +20,7 @@ public class UserRepository {
         String GET_USER_BY_EMAIL = "SELECT " +
                     "[User].FirstName, " +
                     "[User].LastName, " +
+                    "[User].IsUserActive," +
                     "Contact.Email, " +
                     "[UserRole].[Role] " +
                     "FROM " +
@@ -38,5 +39,6 @@ public class UserRepository {
             resultSet.getString("firstName"),
             resultSet.getString("lastName"),
             resultSet.getString("email"),
-            resultSet.getString("role")));
+            resultSet.getString("role"),
+            resultSet.getBoolean("IsUserActive")));
 }

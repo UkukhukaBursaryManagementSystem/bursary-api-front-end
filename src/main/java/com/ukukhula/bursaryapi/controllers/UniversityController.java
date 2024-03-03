@@ -92,4 +92,10 @@ public class UniversityController {
 
     return universityRepository.getAllGenders();
   }
+
+  @GetMapping("/universities/applications/{status}")
+  public List<University> getUniversitiesByStatus(@PathVariable int status)
+  {
+    return universityRepository.getUniversitiesByApplicationStatus(status);
+  };
 }

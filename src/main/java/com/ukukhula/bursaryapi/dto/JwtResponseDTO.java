@@ -1,10 +1,10 @@
 package com.ukukhula.bursaryapi.dto;
 
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Builder;
 
-@Data
-@AllArgsConstructor
+@Getter
 @Builder
 public class JwtResponseDTO {
 

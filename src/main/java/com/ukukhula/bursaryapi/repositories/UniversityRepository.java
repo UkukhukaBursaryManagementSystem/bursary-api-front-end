@@ -1,7 +1,9 @@
 package com.ukukhula.bursaryapi.repositories;
 
+import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.time.Year;
 import java.util.List;
 import java.util.Objects;
 
@@ -40,8 +42,6 @@ public class UniversityRepository {
 
   private static final String GET_ALL_ETHNICITY = "SELECT  ID,[Ethnic] as Name FROM Ethnicity";
 
-
-
   final JdbcTemplate jdbcTemplate;
 
   public UniversityRepository(JdbcTemplate jdbcTemplate) {
@@ -77,6 +77,20 @@ public class UniversityRepository {
     }
   }
 
+  public BigDecimal getUniversityBalance(String universityName) {
+    final String GET_UNIVERSITY_BALANCE = "SELECT DBO.GetRemainingUniversityFunds(? ,?)";
+    int currentYear = Year.now().getValue();
+    return jdbcTemplate.queryForObject(GET_UNIVERSITY_BALANCE, BigDecimal.class, universityName, currentYear);
+
+  }
+
+  public BigDecimal getUniversityTotalSpent(String universityName) {
+    final String GET_UNIVERSITY_TOTAL_SPENT = "SELECT DBO.GetTotalUniversityAllocatedToStudents(? ,?)";
+    int currentYear = Year.now().getValue();
+    return jdbcTemplate.queryForObject(GET_UNIVERSITY_TOTAL_SPENT, BigDecimal.class, universityName, currentYear);
+
+  }
+
   public List<University> getAllUniversities() {
     try {
       return jdbcTemplate.query(GET_ALL_UNIVERSITIES, universityRowMapper);
@@ -86,7 +100,6 @@ public class UniversityRepository {
       throw new RuntimeException("Unexpected error occurred", e);
     }
   }
-
 
   public List<Department> getAllDepartments() {
     try {
@@ -98,7 +111,6 @@ public class UniversityRepository {
     }
   }
 
-
   public List<HeadOfDepartment> getAllHeadOfDepartments() {
     try {
       return jdbcTemplate.query(GET_ALL_HODs, headDepartmentRowMapper);
@@ -108,7 +120,6 @@ public class UniversityRepository {
       throw new RuntimeException("Unexpected error occurred", e);
     }
   }
-
 
   public List<Gender> getAllGenders() {
     try {
@@ -122,7 +133,7 @@ public class UniversityRepository {
 
   public List<Ethnicity> getAllEthnicities() {
     try {
-      return jdbcTemplate.query(GET_ALL_ETHNICITY,  ethnicityRowMapper);
+      return jdbcTemplate.query(GET_ALL_ETHNICITY, ethnicityRowMapper);
     } catch (EmptyResultDataAccessException e) {
       throw new RuntimeException("No head of  ethnicities to show");
     } catch (Exception e) {
@@ -146,21 +157,19 @@ public class UniversityRepository {
       rowNumber) -> new University(resultSet.getInt("ID"),
           resultSet.getString("UniversityName")));
 
-
   private final RowMapper<Department> departmentRowMapper = ((resultSet,
-  rowNumber) -> new Department(resultSet.getInt("ID"),
-      resultSet.getString("Name")));
+      rowNumber) -> new Department(resultSet.getInt("ID"),
+          resultSet.getString("Name")));
 
+  private final RowMapper<HeadOfDepartment> headDepartmentRowMapper = ((resultSet,
+      rowNumber) -> new HeadOfDepartment(resultSet.getInt("ID"),
+          resultSet.getString("Name")));
 
-    private final RowMapper<HeadOfDepartment> headDepartmentRowMapper = ((resultSet,
-    rowNumber) -> new HeadOfDepartment(resultSet.getInt("ID"),
-        resultSet.getString("Name")));
+  private final RowMapper<Gender> genderRowMapper = ((resultSet,
+      rowNumber) -> new Gender(resultSet.getInt("ID"),
+          resultSet.getString("Name")));
 
-    private final RowMapper<Gender> genderRowMapper = ((resultSet,
-    rowNumber) -> new Gender(resultSet.getInt("ID"),
-        resultSet.getString("Name")));
-
-    private final RowMapper<Ethnicity> ethnicityRowMapper = ((resultSet,
-    rowNumber) -> new Ethnicity(resultSet.getInt("ID"),
-        resultSet.getString("Name")));
+  private final RowMapper<Ethnicity> ethnicityRowMapper = ((resultSet,
+      rowNumber) -> new Ethnicity(resultSet.getInt("ID"),
+          resultSet.getString("Name")));
 }

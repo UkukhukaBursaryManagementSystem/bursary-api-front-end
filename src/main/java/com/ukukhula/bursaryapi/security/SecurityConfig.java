@@ -32,8 +32,7 @@ public class SecurityConfig
                         .requestMatchers("/user/**").permitAll()
                         .requestMatchers("/requestAccess").permitAll()
                         .anyRequest().authenticated())
-                .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
+                        .build();
     }
 }
 

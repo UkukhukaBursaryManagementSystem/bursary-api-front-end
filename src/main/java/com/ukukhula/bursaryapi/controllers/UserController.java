@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ukukhula.bursaryapi.repositories.UserRepository;
 import com.ukukhula.bursaryapi.dto.AdminDTO;
 import com.ukukhula.bursaryapi.dto.HodDTO;
+import com.ukukhula.bursaryapi.dto.UserLogDTO;
 import com.ukukhula.bursaryapi.entities.User;
 import org.springframework.http.ResponseEntity;
 
@@ -59,5 +60,17 @@ public class UserController
             e.printStackTrace();
             return ResponseEntity.badRequest().body("{\\\"error\\\": \\\"Failed to add new head of department,please try again or check if the HOD is not already in the system\"}");
         }
+    }
+
+    @PostMapping("/user/log")
+    public ResponseEntity<?> insertUserLogs(@RequestBody UserLogDTO userLogDTO)
+    {
+        try
+        {
+            userRepository.addUserLog(userLogDTO);
+            return ResponseEntity.ok("{\"message\": \"User log was added successfully\"}");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("{\"message\": \"Failed to load log for user\"}");
+    }
     }
 }

@@ -1,5 +1,6 @@
 package com.ukukhula.bursaryapi.repositories;
 
+import com.ukukhula.bursaryapi.dto.ApplicationReviewDTO;
 import com.ukukhula.bursaryapi.dto.DocumentsDTO;
 import com.ukukhula.bursaryapi.dto.NewStudentApplicationDTO;
 import com.ukukhula.bursaryapi.dto.StudentApplicationDTO;
@@ -234,5 +235,23 @@ public class StudentApplicationRepository {
         simpleJdbcCall.execute(inParams);
         
     }
+
+
+    public void reviewApplication(ApplicationReviewDTO application, String applicationType) throws Exception{
+
+        
+        SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate)
+                .withProcedureName((applicationType.equalsIgnoreCase("student")) ? "uspReviewStudentApplication": "uspReviewStudentApplication" );
+        MapSqlParameterSource inParams = new MapSqlParameterSource()
+                .addValue("ApplicationID", application.getApplicationID())
+                .addValue("NewStatus", application.getStatusID())
+                .addValue("ReviewComment",(application.getReviewerComment() != null) ? application.getReviewerComment() : "No comment provided");
+
+        simpleJdbcCall.execute(inParams);
+        
+    }
+
+
+    
 
 }

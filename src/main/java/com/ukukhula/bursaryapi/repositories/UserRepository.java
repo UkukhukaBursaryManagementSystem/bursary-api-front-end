@@ -21,6 +21,7 @@ public class UserRepository {
                     "[User].FirstName, " +
                     "[User].LastName, " +
                     "[User].IsUserActive," +
+                    "[User].ID, " +
                     "Contact.Email, " +
                     "[UserRole].[Role] " +
                     "FROM " +
@@ -40,5 +41,6 @@ public class UserRepository {
             resultSet.getString("lastName"),
             resultSet.getString("email"),
             resultSet.getString("role"),
-            resultSet.getBoolean("IsUserActive")));
+            resultSet.getBoolean("IsUserActive"),
+            resultSet.getInt("ID")));
 }

@@ -1,6 +1,5 @@
 package com.ukukhula.bursaryapi.repositories;
 
-import com.ukukhula.bursaryapi.entities.StudentAllocation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;

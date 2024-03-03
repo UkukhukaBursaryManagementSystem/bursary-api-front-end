@@ -18,30 +18,20 @@ import java.util.Arrays;
 
 @Configuration
 @RequiredArgsConstructor
+@EnableMethodSecurity
+@EnableWebSecurity
 public class SecurityConfig
 {
 
     private final authFilter authFilter;
 
-    @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOriginPattern("*");
-        configuration.setAllowedMethods(Arrays.asList("GET","POST"));
-        configuration.setAllowCredentials(false);
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception
     {
-        return http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .authorizeHttpRequests((authorize) -> authorize
-                        .anyRequest().permitAll())
-                        .build();
+        http
+                .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
+        return http.build();
     }
 }
 

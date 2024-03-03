@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import com.ukukhula.bursaryapi.security.JwtService;
 
 
 @RestController
@@ -17,9 +16,6 @@ public class AuthController {
     @PostMapping("/auth/login")
     public JwtResponseDTO GetToken(@RequestBody @Validated AuthRequestDTO authRequestDTO)
     {
-        JwtService jwtService = new JwtService();
-        return JwtResponseDTO
-                .builder()
-                .accessToken(jwtService.GenerateToken(authRequestDTO.getUsername(), authRequestDTO.getRole(), authRequestDTO.getMicrosoftAccessToken())).build();
+            return new JwtResponseDTO("I have logged in");
     }
 }

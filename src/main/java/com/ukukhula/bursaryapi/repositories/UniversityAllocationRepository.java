@@ -106,6 +106,12 @@ public class UniversityAllocationRepository {
     public String getAdminBalance() {
         String GET_ADMIN_BALANCE = "SELECT [dbo].[CalculateRemainingAdminBalance](?)";
         int currentYear = Year.now().getValue();
-        return jdbcTemplate.queryForObject(GET_ADMIN_BALANCE, String.class,currentYear);
+        return jdbcTemplate.queryForObject(GET_ADMIN_BALANCE, String.class, currentYear);
+    }
+
+    public String getAdminTotalSpent() {
+        String GET_ADMIN_TOTAL_SPENT = "SELECT [dbo].[GetTotalUniversityAllocationsForYear](?)";
+        int currentYear = Year.now().getValue();
+        return jdbcTemplate.queryForObject(GET_ADMIN_TOTAL_SPENT, String.class, currentYear);
     }
 }

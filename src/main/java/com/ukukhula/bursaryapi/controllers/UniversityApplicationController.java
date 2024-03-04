@@ -66,9 +66,9 @@ public class UniversityApplicationController {
     }
 
     @GetMapping("/universities/approved")
-    public List<UniversityApplication> getAllFundedUniversityApplications() {
+    public List<UniversityApplication> getAllApprovedUniversityApplications() {
         try {
-            return universityApplicationRepository.getAllUniversityApplications();
+            return universityApplicationRepository.getAllApprovedUniversityApplications();
         } catch (Exception e) {
             e.printStackTrace();
             return Collections.emptyList();

@@ -106,7 +106,7 @@ public class UniversityAllocationController {
     }
 
     @GetMapping("/adminbalance")
-    public ResponseEntity<?> getAdminBalance(@PathVariable int id) {
+    public ResponseEntity<?> getAdminBalance() {
         String balance = universityAllocationRepository.getAdminBalance();
         if (balance != null) {
             String message = "{\"balance\": \"" + balance + "\"}";

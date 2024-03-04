@@ -65,15 +65,26 @@ public class UniversityController {
   }
 
   @GetMapping("/balance")
-  public BigDecimal getUniversityBalance(@RequestParam Map<String, Object> allocationDetails) {
+  public ResponseEntity<BigDecimal> getUniversityBalance(@RequestParam Map<String, Object> allocationDetails) {
     String universityName = (String) allocationDetails.get("universityName");
-    return universityRepository.getUniversityBalance(universityName);
+    return ResponseEntity.ok(universityRepository.getUniversityBalance(universityName));
   }
 
   @GetMapping("/total-student-allocations")
-  public BigDecimal getUniversityTotalSpent(@RequestParam Map<String, Object> allocationDetails) {
+  public ResponseEntity<BigDecimal> getUniversityTotalSpent(@RequestParam Map<String, Object> allocationDetails) {
     String universityName = (String) allocationDetails.get("universityName");
-    return universityRepository.getUniversityTotalSpent(universityName);
+    return ResponseEntity.ok(universityRepository.getUniversityTotalSpent(universityName));
+  }
+
+
+  @GetMapping("/total-money-spent/{universityName}")
+  public ResponseEntity<BigDecimal> getUniversityTotalSpent(@RequestParam String universityName) {
+    return ResponseEntity.ok(universityRepository.getUniversityTotalSpent(universityName));
+  }
+
+  @GetMapping("/balance/{universityName}")
+  public ResponseEntity<BigDecimal> getUniversityBalance(@RequestParam String universityName) {
+    return ResponseEntity.ok(universityRepository.getUniversityBalance(universityName));
   }
 
   @GetMapping("/hod")

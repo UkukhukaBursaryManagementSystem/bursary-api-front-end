@@ -47,6 +47,14 @@ public class UniversityApplicationRepository {
         return results;
     }
 
+    public List<UniversityApplication> getAllApprovedUniversityApplications() throws Exception {
+        String GET_ALL_APPLICATIONS = "SELECT * FROM [dbo].[UniversityApplication] WHERE statusID = 2";
+
+        List<UniversityApplication> results = jdbcTemplate.query(GET_ALL_APPLICATIONS,
+                universityApplicationRowMapper);
+        return results;
+    }
+
     private final RowMapper<UniversityApplication> universityApplicationRowMapper = ((resultSet, rowNumber) -> {
         return new UniversityApplication(
                 resultSet.getInt("ApplicationID"), resultSet.getString(

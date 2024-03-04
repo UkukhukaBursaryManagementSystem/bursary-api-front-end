@@ -3,6 +3,8 @@ package com.ukukhula.bursaryapi.repositories;
 import com.ukukhula.bursaryapi.dto.AdminDTO;
 import com.ukukhula.bursaryapi.dto.DocumentsDTO;
 import com.ukukhula.bursaryapi.dto.HodDTO;
+import com.ukukhula.bursaryapi.dto.UserLogDTO;
+import com.ukukhula.bursaryapi.entities.Request;
 import com.ukukhula.bursaryapi.entities.User;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -68,7 +70,24 @@ public class UserRepository {
         
     }
 
+    public UserLogDTO addUserLog(UserLogDTO userLogDTO) {
 
+        String INSERT_LOG = "INSERT INTO [dbo].[UserLogs]" +
+                " ([UserID], [UserName], [MsToken], [TimeStamp])" +
+                " VALUES(?, ?, ?, DEFAULT)";
+
+        int rowsAffected = jdbcTemplate.update(INSERT_LOG,
+                userLogDTO.getUserId(),
+                userLogDTO.getUserName(),
+                userLogDTO.getUserAccessToken());
+
+
+        if (rowsAffected > 0) {
+            return userLogDTO;
+        } else {
+            throw new RuntimeException("Error creating Request. No rows affected.");
+        }
+    }
 
 
     public Boolean doesUserExist(String email) {
@@ -82,4 +101,9 @@ public class UserRepository {
             resultSet.getString("role"),
             resultSet.getBoolean("IsUserActive"),
             resultSet.getInt("ID")));
+
+    private final RowMapper<UserLogDTO> userLogRowMapper = ((resultSet, rowNumber ) -> new UserLogDTO(
+            resultSet.getInt("userId"),
+            resultSet.getString("userName"),
+            resultSet.getString("userAccessToken")));
 }

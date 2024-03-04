@@ -72,6 +72,11 @@ public class UniversityRepository {
     }
   }
 
+  public String getUniversityForHOD(int id) {
+    final String SELECT_UNIVERSITY = "SELECT UniversityName FROM HODUniversityView WHERE UserID = ?";
+    return jdbcTemplate.queryForObject(SELECT_UNIVERSITY, String.class, id);
+  }
+
   public BigDecimal getUniversityBalance(String universityName) {
     final String GET_UNIVERSITY_BALANCE = "SELECT DBO.GetRemainingUniversityFunds(? ,?)";
     int currentYear = Year.now().getValue();

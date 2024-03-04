@@ -12,6 +12,7 @@ import com.ukukhula.bursaryapi.entities.StudentAllocation;
 import com.ukukhula.bursaryapi.repositories.StudentAllocationRepository;
 
 @Controller
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class StudentAllocationController {
 
     private final StudentAllocationRepository studentAllocationRepository;

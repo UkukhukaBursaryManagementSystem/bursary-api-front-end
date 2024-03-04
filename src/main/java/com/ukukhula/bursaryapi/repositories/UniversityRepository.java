@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.time.Year;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import org.springframework.stereotype.Repository;
@@ -30,6 +32,14 @@ public class UniversityRepository {
       "uspGetUniversityById(?)}";
   private static final String GET_ALL_UNIVERSITIES = "SELECT ID, UniversityName FROM University";
 
+  private static final String GET_UNIVERSITIES_BY_STATUS ="SELECT " +
+          "UniversityApplication.UniversityID AS ID," +
+          "University.UniversityName " +
+          "FROM " +
+          "UniversityApplication " +
+          "JOIN " +
+          "University ON UniversityApplication.UniversityID = University.ID " +
+          "WHERE UniversityApplication.StatusID = ?";
   private static final String GET_ALL_DEPARTMENTS = "SELECT ID, Name FROM Department";
 
   private static final String GET_ALL_HODs = "SELECT ID, Name from vHeadOFDepartments";
@@ -149,6 +159,24 @@ public class UniversityRepository {
       throw new RuntimeException("Unexpected error occurred", e);
     }
   }
+
+
+  public String getUniversityForHOD(int id) {
+    final String SELECT_UNIVERSITY = "SELECT UniversityName FROM HODUniversityView WHERE UserID = ?";
+    return jdbcTemplate.queryForObject(SELECT_UNIVERSITY, String.class, id);
+  }
+
+  public List<University> getUniversitiesByApplicationStatus(int status)
+  {
+    try {
+      return jdbcTemplate.query(GET_UNIVERSITIES_BY_STATUS, universityRowMapper, status);
+    } catch (EmptyResultDataAccessException e) {
+      throw new RuntimeException("No University found with status" + status);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
+
 
   private final RowMapper<University> universityRowMapper = ((resultSet,
       rowNumber) -> new University(resultSet.getInt("ID"),

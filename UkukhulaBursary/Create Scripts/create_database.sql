@@ -151,8 +151,22 @@ CREATE TABLE [dbo].[UserRole]
 )
 GO
 
+CREATE TABLE [dbo].[documentLink]
+(
+	[ID] INT IDENTITY(1,1) PRIMARY KEY NOT NULL ,
+	[ApplicationID] INT UNIQUE NOT NULL,
+	[LinkUUID] VARCHAR(MAX)  NOT NULL,
+	[Link]  VARCHAR(MAX) NOT NULL,
+	[ExpiryDate] DATETIME  NOT NULL DEFAULT DATEADD(DAY, 7, GETDATE()),
+)
+GO
+
 
 ---------------Add the constraints-----------------------------
+ALTER TABLE [dbo].[documentLink]
+ADD CONSTRAINT [FK_Application_link] FOREIGN KEY ([ApplicationID]) REFERENCES [dbo].[StudentApplication](ID);
+GO
+
 
 ALTER TABLE [dbo].[BBDAdministrator]
 ADD CONSTRAINT [FK_BBDAdministratorUserID] FOREIGN KEY([UserID]) REFERENCES [dbo].[User]

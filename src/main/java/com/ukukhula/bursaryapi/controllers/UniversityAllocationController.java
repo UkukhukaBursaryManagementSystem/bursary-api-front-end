@@ -4,6 +4,7 @@ import com.ukukhula.bursaryapi.entities.UniversityAllocation;
 import com.ukukhula.bursaryapi.repositories.UniversityAllocationRepository;
 
 import java.math.BigDecimal;
+import java.time.Year;
 import java.util.List;
 import java.util.Map;
 
@@ -77,7 +78,7 @@ public class UniversityAllocationController {
 
     @PostMapping("/addnew")
     public String addNewAllocation(@RequestBody Map<String, Object> allocationDetails) {
-      
+
         String universityName = (String) allocationDetails.get("universityName");
         BigDecimal amount = new BigDecimal(allocationDetails.get("amount").toString());
         int year = Integer.parseInt(allocationDetails.get("year").toString());
@@ -102,5 +103,27 @@ public class UniversityAllocationController {
             throw e;
         }
 
+    }
+
+    @GetMapping("/adminbalance")
+    public ResponseEntity<?> getAdminBalance() {
+        String balance = universityAllocationRepository.getAdminBalance();
+        if (balance != null) {
+            String message = "{\"balance\": \"" + balance + "\"}";
+            return ResponseEntity.ok(message);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/admintotalspent")
+    public ResponseEntity<?> getAdminTotalSpent() {
+        String totalSpent = universityAllocationRepository.getAdminTotalSpent();
+        if (totalSpent != null) {
+            String message = "{\"totalSpent\": \"" + totalSpent + "\"}";
+            return ResponseEntity.ok(message);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

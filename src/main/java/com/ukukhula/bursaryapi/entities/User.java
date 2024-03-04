@@ -15,13 +15,15 @@ public class User {
 
     private String role;
 
-    private Boolean isUserActive;
+    private boolean isUserActive;
+    private int userId;
 
-    public User(String firstName, String lastName, String email, String role, boolean isUserActive) {
+    public User(String firstName, String lastName, String email, String role, boolean isUserActive, int userId) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.role = role;
         this.isUserActive = isUserActive;
+        this.userId = userId;
     }
 }

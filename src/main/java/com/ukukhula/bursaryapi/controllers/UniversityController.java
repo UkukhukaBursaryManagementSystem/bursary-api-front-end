@@ -99,5 +99,20 @@ public class UniversityController {
 
     return universityRepository.getUniversityInfoByUserID(userID);
 
+  @GetMapping("/universities/applications/{status}")
+  public List<University> getUniversitiesByStatus(@PathVariable int status)
+  {
+    return universityRepository.getUniversitiesByApplicationStatus(status);
+  };
+
+  @GetMapping("/university/hod/{id}")
+  public ResponseEntity<?> getUniversityForHOD(@PathVariable int id) {
+      String universityName = universityRepository.getUniversityForHOD(id);
+      if (universityName != null) {
+        String message = "{\"message\": \"" + universityName + "\"}";
+        return ResponseEntity.ok(message);
+      } else {
+          return ResponseEntity.notFound().build();
+      }
   }
 }

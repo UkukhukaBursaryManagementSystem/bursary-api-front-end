@@ -146,6 +146,12 @@ public class UniversityRepository {
     }
   }
 
+
+  public String getUniversityForHOD(int id) {
+    final String SELECT_UNIVERSITY = "SELECT UniversityName FROM HODUniversityView WHERE UserID = ?";
+    return jdbcTemplate.queryForObject(SELECT_UNIVERSITY, String.class, id);
+  }
+
   public List<University> getUniversitiesByApplicationStatus(int status)
   {
     try {

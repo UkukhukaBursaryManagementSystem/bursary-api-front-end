@@ -78,12 +78,12 @@ public class UniversityController {
 
 
   @GetMapping("/total-money-spent/{universityName}")
-  public ResponseEntity<BigDecimal> getUniversityTotalSpent(@RequestParam String universityName) {
+  public ResponseEntity<BigDecimal> getUniversityTotalSpent(@PathVariable String universityName) {
     return ResponseEntity.ok(universityRepository.getUniversityTotalSpent(universityName));
   }
 
   @GetMapping("/balance/{universityName}")
-  public ResponseEntity<BigDecimal> getUniversityBalance(@RequestParam String universityName) {
+  public ResponseEntity<BigDecimal> getUniversityBalance(@PathVariable String universityName) {
     return ResponseEntity.ok(universityRepository.getUniversityBalance(universityName));
   }
 

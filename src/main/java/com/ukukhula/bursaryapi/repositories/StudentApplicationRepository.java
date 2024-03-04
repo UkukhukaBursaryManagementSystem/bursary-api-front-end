@@ -2,6 +2,7 @@ package com.ukukhula.bursaryapi.repositories;
 
 import com.ukukhula.bursaryapi.dto.ApplicationReviewDTO;
 import com.ukukhula.bursaryapi.dto.DocumentsDTO;
+import com.ukukhula.bursaryapi.dto.LinkDTO;
 import com.ukukhula.bursaryapi.dto.NewStudentApplicationDTO;
 import com.ukukhula.bursaryapi.dto.StudentApplicationDTO;
 import com.ukukhula.bursaryapi.entities.StudentApplication;
@@ -13,6 +14,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -209,7 +211,7 @@ public class StudentApplicationRepository {
         SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate)
                 .withProcedureName("uspAddStudentDocuments");
         MapSqlParameterSource inParams = new MapSqlParameterSource()
-                .addValue("StudentID", docs.getStudentID())
+                .addValue("ApplicationID", docs.getApplicationID())
                 .addValue("IdCopy", docs.getIdURL())
                 .addValue("AcademicTranscript", docs.getTranscriptURL())
                 .addValue("CurriculumVitae", docs.getResumeURL());
@@ -231,6 +233,23 @@ public class StudentApplicationRepository {
 
         simpleJdbcCall.execute(inParams);
         
+    }
+
+    public String generateLink(LinkDTO Link) throws Exception{
+        String linkUUID = UUID.randomUUID().toString();
+        String link = Link.getBaseURL() +"?linkID=" +linkUUID + "&applicationID="+ Link.getApplicationID();
+        
+        SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate)
+        .withProcedureName("uspInsertLink");
+        MapSqlParameterSource inParams = new MapSqlParameterSource()
+                .addValue("ApplicationID", Link.getApplicationID())
+                .addValue("LinkUUID", linkUUID)
+                .addValue("Link", link);
+
+        simpleJdbcCall.execute(inParams);
+
+        return link;
+
     }
 
 

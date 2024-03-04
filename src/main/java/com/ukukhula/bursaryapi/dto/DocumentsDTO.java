@@ -8,14 +8,14 @@ import lombok.Data;
 @Data
 public class DocumentsDTO {
 
-    int StudentID;
+    int ApplicationID;
     String ResumeURL;
     String TranscriptURL;
     String IdURL;
 
-    public DocumentsDTO(int studentID, String resumeURL, String transcriptURL, String idURL){
+    public DocumentsDTO(int applicationID, String resumeURL, String transcriptURL, String idURL){
 
-        this.StudentID = studentID;
+        this.ApplicationID = applicationID;
         this.ResumeURL = resumeURL;
         this.TranscriptURL = transcriptURL;
         this.IdURL = idURL;

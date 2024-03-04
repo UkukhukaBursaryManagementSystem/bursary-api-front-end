@@ -92,4 +92,9 @@ public class UniversityController {
 
     return universityRepository.getAllGenders();
   }
+
+  @GetMapping("/university/hod/{id}")
+  public String getUniversityForHOD(@PathVariable int id) {
+    return universityRepository.getUniversityForHOD(id);
+  }
 }

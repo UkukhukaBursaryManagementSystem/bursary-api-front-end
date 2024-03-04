@@ -9,7 +9,7 @@ BEGIN TRY
 	BEGIN TRANSACTION
 		DECLARE @StudentID INT;
 
-		SELECT @StudentID = lollllllllll[StudentID] FROM [dbo].[StudentApplication] where [ID] = @ApplicationID;
+		SELECT @StudentID = [StudentID] FROM [dbo].[StudentApplication] where [ID] = @ApplicationID;
 
 		IF NOT EXISTS ( SELECT 1 FROM [dbo].[StudentDocuments] WHERE [dbo].[StudentDocuments].[StudentID] = @StudentID )
 			BEGIN

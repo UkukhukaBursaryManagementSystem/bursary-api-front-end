@@ -100,7 +100,13 @@ public class UniversityController {
   };
 
   @GetMapping("/university/hod/{id}")
-  public String getUniversityForHOD(@PathVariable int id) {
-    return universityRepository.getUniversityForHOD(id);
+  public ResponseEntity<?> getUniversityForHOD(@PathVariable int id) {
+      String universityName = universityRepository.getUniversityForHOD(id);
+      if (universityName != null) {
+        String message = "{\"message\": \"" + universityName + "\"}";
+        return ResponseEntity.ok(message);
+      } else {
+          return ResponseEntity.notFound().build();
+      }
   }
 }

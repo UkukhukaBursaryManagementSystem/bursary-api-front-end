@@ -25,29 +25,16 @@ public class RequestRepository {
                 resultSet.getString("lastName"),
                 resultSet.getString("phoneNumber"),
                 resultSet.getString("email"),
-                resultSet.getInt("department"),
-                resultSet.getInt("university"));
+                resultSet.getString("department"),
+                resultSet.getString("universityName"));
     });
 
-    public Request createRequest(Request request) {
+    public Integer createRequest(String firstName, String lastName, String phoneNumber, String email, String department,
+            String universityName) {
+        String INSERT_INTO_REQUESTS = "{CALL InsertRequest (?,?,?,?,?,?)}";
+        return jdbcTemplate.update(INSERT_INTO_REQUESTS, firstName, lastName, phoneNumber, email,
+                department,universityName);
 
-        String SEND_REQUEST = "INSERT INTO [dbo].[Requests]" +
-                " ([firstName], [lastName], [phoneNumber], [email], [department], [university])" +
-                " VALUES(?, ?, ?, ?, ?, ?)";
-
-        int rowsAffected = jdbcTemplate.update(SEND_REQUEST,
-                request.getFirstName(),
-                request.getLastName(),
-                request.getPhoneNumber(),
-                request.getEmail(),
-                request.getDepartment(),
-                request.getUniversityName());
-
-        if (rowsAffected > 0) {
-            return request;
-        } else {
-            throw new RuntimeException("Error creating Request. No rows affected.");
-        }
     }
 
     public List<Request> getAllRequests() {

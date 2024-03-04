@@ -18,22 +18,18 @@ public class RequestsController {
 
     private RequestRepository requestRepository;
 
-    public RequestsController( RequestRepository requestRepository )
-    {
+    public RequestsController(RequestRepository requestRepository) {
         this.requestRepository = requestRepository;
     }
+
     @PostMapping("/requestAccess")
-    public ResponseEntity<?> sendRequest(@RequestBody Request request)
-    {
-        try {
-            requestRepository.createRequest(request);
-            return ResponseEntity.ok("{\"message\": \"Request sent successfully\"}");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("{\\\"error\\\": \\\"Failed to send request, please ensure all form fields are valid\"}");
-        }
+    public Integer createRequest(@RequestBody Request request) {
+        return requestRepository.createRequest(request.getFirstName(), request.getLastName(),
+                request.getPhoneNumber(), request.getEmail(), request.getDepartment(),
+                request.getUniversityName());
     }
 
-     @GetMapping("/allrequests")
+    @GetMapping("/allrequests")
     public ResponseEntity<List<Request>> getAllRequests() {
         List<Request> allRequests = requestRepository.getAllRequests();
         if (allRequests.isEmpty()) {

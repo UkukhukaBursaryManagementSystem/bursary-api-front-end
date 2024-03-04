@@ -95,9 +95,9 @@ public class UniversityController {
   }
 
   @GetMapping("/info/{userID}")
-  public UniversityInfoDTO getUniversityInfoByUserID(@PathVariable int userID){
-
-    return universityRepository.getUniversityInfoByUserID(userID);
+  public ResponseEntity<UniversityInfoDTO> getUniversityInfoByUserID(@PathVariable int userID){
+    UniversityInfoDTO dto = universityRepository.getUniversityInfoByUserID(userID);
+      return ResponseEntity.ok(dto);
 
   }
 

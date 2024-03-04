@@ -1,5 +1,8 @@
 package com.ukukhula.bursaryapi.dto;
 
+import lombok.Data;
+
+@Data
 public class UniversityInfoDTO {
     int HeadOfDepartmentID;
     int DepartmentID;

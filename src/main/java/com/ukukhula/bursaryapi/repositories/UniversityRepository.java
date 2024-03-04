@@ -48,7 +48,7 @@ public class UniversityRepository {
 
   private static final String GET_ALL_ETHNICITY = "SELECT  ID,[Ethnic] as Name FROM Ethnicity";
 
-  private static final String GET_UNIVERSITY_INFO_FROM_USER_ID = "SELECT Rep.ID, Rep.DepartmentID, Rep.UniversityID , uni.UniversityName FROM UniversityRepresentative AS Rep INNER JOIN University as uni ON rep.UniversityID = uni.ID WHERE [UserID] = ?";
+  private static final String GET_UNIVERSITY_INFO_FROM_USER_ID = "SELECT Rep.ID as ID, Rep.DepartmentID as DepartmentID, Rep.UniversityID AS UniversityID, uni.UniversityName as UniversityName FROM UniversityRepresentative AS Rep INNER JOIN University as uni ON rep.UniversityID = uni.ID WHERE [UserID] = ?";
 
   final JdbcTemplate jdbcTemplate;
 

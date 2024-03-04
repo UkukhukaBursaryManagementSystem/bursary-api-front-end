@@ -47,7 +47,7 @@ public class UniversityApplicationRepository {
         return results;
     }
 
-    public List<UniversityApplication> getAllFundedUniversityApplications() throws Exception {
+    public List<UniversityApplication> getAllApprovedUniversityApplications() throws Exception {
         String GET_ALL_APPLICATIONS = "SELECT * FROM [dbo].[UniversityApplication] WHERE statusID = 2";
 
         List<UniversityApplication> results = jdbcTemplate.query(GET_ALL_APPLICATIONS,

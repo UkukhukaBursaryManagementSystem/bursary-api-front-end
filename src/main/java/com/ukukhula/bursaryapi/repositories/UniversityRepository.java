@@ -202,6 +202,6 @@ public class UniversityRepository {
 
   private final RowMapper<UniversityInfoDTO> infoRowMapper = ((resultSet,
   rowNumber) -> new UniversityInfoDTO(resultSet.getInt("ID"),
-      resultSet.getInt("DepartmentID"), resultSet.getInt("UniversityID"), resultSet.getString("UniveristyName")));
+      resultSet.getInt("DepartmentID"), resultSet.getInt("UniversityID"), resultSet.getString("UniversityName")));
         
 }

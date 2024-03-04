@@ -1,5 +1,5 @@
 CREATE PROCEDURE [dbo].[uspAddStudentDocuments]
-@StudentID INT,
+@ApplicationID INT,
 @IdCopy VARCHAR(MAX),
 @AcademicTranscript VARCHAR(MAX),
 @CurriculumVitae VARCHAR(MAX)
@@ -7,6 +7,10 @@ CREATE PROCEDURE [dbo].[uspAddStudentDocuments]
 AS 
 BEGIN TRY
 	BEGIN TRANSACTION
+		DECLARE @StudentID INT;
+
+		SELECT @StudentID = lollllllllll[StudentID] FROM [dbo].[StudentApplication] where [ID] = @ApplicationID;
+
 		IF NOT EXISTS ( SELECT 1 FROM [dbo].[StudentDocuments] WHERE [dbo].[StudentDocuments].[StudentID] = @StudentID )
 			BEGIN
 				INSERT INTO [dbo].[StudentDocuments] (StudentID, IdCopy, AcademicTranscript, CurriculumVitae)
@@ -29,6 +33,7 @@ BEGIN CATCH
 	THROW;
 END CATCH
 GO
+
 
 
 EXEC [dbo].[uspAddStudentDocuments] 1, 'my id','my trans','my cv'

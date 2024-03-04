@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.ukukhula.bursaryapi.dto.ApplicationReviewDTO;
 import com.ukukhula.bursaryapi.dto.DocumentsDTO;
+import com.ukukhula.bursaryapi.dto.LinkDTO;
 import com.ukukhula.bursaryapi.dto.NewStudentApplicationDTO;
 import com.ukukhula.bursaryapi.dto.StudentApplicationDTO;
 import com.ukukhula.bursaryapi.entities.StudentApplication;
@@ -242,6 +243,19 @@ public class StudentApplicationController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("{\\\"error\\\": \\\"Failed to add review for university application.\"}");
         }
+    }
+
+    @PostMapping("/generate-link")
+    public ResponseEntity<?> getGeneratedLink(@RequestBody LinkDTO link){
+        try {
+            String genLink = studentApplicationRepository.generateLink(link);
+            String jsonResponse = String.format("{\"message\":\"Link successfully created\",\"url\":\"%s\"}", genLink);
+            return ResponseEntity.ok(jsonResponse);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("{\\\"error\\\": \\\"Failed to create link for the application.\"}");
+        }
+
+
     }
 
 }

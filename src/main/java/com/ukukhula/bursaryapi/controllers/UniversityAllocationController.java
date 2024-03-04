@@ -115,4 +115,15 @@ public class UniversityAllocationController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/admintotalspent")
+    public ResponseEntity<?> getAdminTotalSpent() {
+        String totalSpent = universityAllocationRepository.getAdminTotalSpent();
+        if (totalSpent != null) {
+            String message = "{\"totalSpent\": \"" + totalSpent + "\"}";
+            return ResponseEntity.ok(message);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

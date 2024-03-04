@@ -98,4 +98,9 @@ public class UniversityController {
   {
     return universityRepository.getUniversitiesByApplicationStatus(status);
   };
+
+  @GetMapping("/university/hod/{id}")
+  public String getUniversityForHOD(@PathVariable int id) {
+    return universityRepository.getUniversityForHOD(id);
+  }
 }

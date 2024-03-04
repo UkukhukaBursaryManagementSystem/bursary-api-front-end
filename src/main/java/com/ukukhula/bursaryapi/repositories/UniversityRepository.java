@@ -9,6 +9,7 @@ import java.util.Objects;
 
 import org.springframework.stereotype.Repository;
 
+import com.ukukhula.bursaryapi.dto.UniversityInfoDTO;
 import com.ukukhula.bursaryapi.entities.Department;
 import com.ukukhula.bursaryapi.entities.Ethnicity;
 import com.ukukhula.bursaryapi.entities.Gender;
@@ -36,6 +37,8 @@ public class UniversityRepository {
   private static final String GET_ALL_GENDERS = "SELECT  ID,[Identity] as [Name] FROM Gender";
 
   private static final String GET_ALL_ETHNICITY = "SELECT  ID,[Ethnic] as Name FROM Ethnicity";
+
+  private static final String GET_UNIVERSITY_INFO_FROM_USER_ID = "SELECT Rep.ID, Rep.DepartmentID, Rep.UniversityID , uni.UniversityName FROM UniversityRepresentative AS Rep INNER JOIN University as uni ON rep.UniversityID = uni.ID WHERE [UserID] = ?";
 
   final JdbcTemplate jdbcTemplate;
 
@@ -67,6 +70,17 @@ public class UniversityRepository {
       return jdbcTemplate.queryForObject(GET_UNIVERSITY_BY_ID, universityRowMapper, id);
     } catch (EmptyResultDataAccessException e) {
       throw new RuntimeException("University not found with ID: " + id, e);
+    } catch (Exception e) {
+      throw new RuntimeException("Unexpected error occurred");
+    }
+  }
+
+
+  public UniversityInfoDTO getUniversityInfoByUserID(int id) {
+    try {
+      return jdbcTemplate.queryForObject(GET_UNIVERSITY_INFO_FROM_USER_ID, infoRowMapper, id);
+    } catch (EmptyResultDataAccessException e) {
+      throw new RuntimeException("User not found with ID: " + id, e);
     } catch (Exception e) {
       throw new RuntimeException("Unexpected error occurred");
     }
@@ -155,4 +169,11 @@ public class UniversityRepository {
   private final RowMapper<Ethnicity> ethnicityRowMapper = ((resultSet,
       rowNumber) -> new Ethnicity(resultSet.getInt("ID"),
           resultSet.getString("Name")));
+
+
+
+  private final RowMapper<UniversityInfoDTO> infoRowMapper = ((resultSet,
+  rowNumber) -> new UniversityInfoDTO(resultSet.getInt("ID"),
+      resultSet.getInt("DepartmentID"), resultSet.getInt("UniversityID"), resultSet.getString("UniveristyName")));
+        
 }

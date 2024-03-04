@@ -2,6 +2,7 @@ package com.ukukhula.bursaryapi.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ukukhula.bursaryapi.dto.UniversityInfoDTO;
 import com.ukukhula.bursaryapi.entities.Department;
 import com.ukukhula.bursaryapi.entities.Ethnicity;
 import com.ukukhula.bursaryapi.entities.Gender;
@@ -91,5 +92,12 @@ public class UniversityController {
   public List<Gender> allGenders() {
 
     return universityRepository.getAllGenders();
+  }
+
+  @GetMapping("/info/{userID}")
+  public UniversityInfoDTO getUniversityInfoByUserID(@PathVariable int userID){
+
+    return universityRepository.getUniversityInfoByUserID(userID);
+
   }
 }

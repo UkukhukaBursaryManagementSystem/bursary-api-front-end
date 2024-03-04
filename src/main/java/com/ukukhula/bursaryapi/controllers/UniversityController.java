@@ -99,6 +99,8 @@ public class UniversityController {
 
     return universityRepository.getUniversityInfoByUserID(userID);
 
+  }
+
   @GetMapping("/universities/applications/{status}")
   public List<University> getUniversitiesByStatus(@PathVariable int status)
   {
@@ -115,4 +117,5 @@ public class UniversityController {
           return ResponseEntity.notFound().build();
       }
   }
+  
 }

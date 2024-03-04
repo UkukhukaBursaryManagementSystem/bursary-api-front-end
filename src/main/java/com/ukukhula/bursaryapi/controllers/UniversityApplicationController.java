@@ -6,6 +6,8 @@ import com.ukukhula.bursaryapi.entities.UniversityApplication;
 import com.ukukhula.bursaryapi.repositories.UniversityApplicationRepository;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
+
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -62,4 +64,15 @@ public class UniversityApplicationController {
     public Integer addUniversityApplicationByAdmin(@RequestParam String universityName) {
         return universityApplicationRepository.addUniversityApplicationByAdmin(universityName);
     }
+
+    @GetMapping("/universities/approved")
+    public List<UniversityApplication> getAllFundedUniversityApplications() {
+        try {
+            return universityApplicationRepository.getAllUniversityApplications();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+
 }

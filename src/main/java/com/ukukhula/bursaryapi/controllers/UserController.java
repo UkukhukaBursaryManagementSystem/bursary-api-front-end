@@ -6,6 +6,7 @@ import com.ukukhula.bursaryapi.repositories.UserRepository;
 import com.ukukhula.bursaryapi.dto.AdminDTO;
 import com.ukukhula.bursaryapi.dto.HodDTO;
 import com.ukukhula.bursaryapi.dto.UserLogDTO;
+import com.ukukhula.bursaryapi.entities.Request;
 import com.ukukhula.bursaryapi.entities.User;
 import org.springframework.http.ResponseEntity;
 
@@ -23,8 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-public class UserController
-{
+public class UserController {
     private final UserRepository userRepository;
 
     UserController(UserRepository userRepository) {
@@ -38,39 +38,32 @@ public class UserController
         return user != null ? ResponseEntity.ok(user) : ResponseEntity.notFound().build();
     }
 
-
     @PostMapping("user/insert-admin")
-    public ResponseEntity<?> insertAdmin(@RequestBody AdminDTO adminDTO){
-        try{
-                userRepository.addAdmin(adminDTO);
-                return ResponseEntity.ok("{\"message\": \"The new admin "+adminDTO.getFirstName()+ " " +adminDTO.getLastName()+" was added successfully\"}");
-        }catch(Exception e){
-            return ResponseEntity.badRequest().body("{\\\"error\\\": \\\"Failed to add new,please try again or check if the admin is not already in the system\"}");
+    public ResponseEntity<?> insertAdmin(@RequestBody AdminDTO adminDTO) {
+        try {
+            userRepository.addAdmin(adminDTO);
+            return ResponseEntity.ok("{\"message\": \"The new admin " + adminDTO.getFirstName() + " "
+                    + adminDTO.getLastName() + " was added successfully\"}");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(
+                    "{\\\"error\\\": \\\"Failed to add new,please try again or check if the admin is not already in the system\"}");
         }
     }
 
-
     @PostMapping("user/insert-hod")
-    public ResponseEntity<?> insertAdmin(@RequestBody HodDTO headOfDepartmentDTO){
-        try{
-
-            userRepository.addHod(headOfDepartmentDTO);
-            return ResponseEntity.ok("{\"message\": \"The new head of department "+headOfDepartmentDTO.getFirstName()+ " " +headOfDepartmentDTO.getLastName()+" was added successfully\"}");
-        }catch(Exception e){
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body("{\\\"error\\\": \\\"Failed to add new head of department,please try again or check if the HOD is not already in the system\"}");
-        }
+    public Integer insertHOD(@RequestBody Request request) {
+        return userRepository.addHod(request.getFirstName(), request.getLastName(),
+                request.getPhoneNumber(), request.getEmail(), request.getDepartment(),
+                request.getUniversityName());
     }
 
     @PostMapping("/user/log")
-    public ResponseEntity<?> insertUserLogs(@RequestBody UserLogDTO userLogDTO)
-    {
-        try
-        {
+    public ResponseEntity<?> insertUserLogs(@RequestBody UserLogDTO userLogDTO) {
+        try {
             userRepository.addUserLog(userLogDTO);
             return ResponseEntity.ok("{\"message\": \"User log was added successfully\"}");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("{\"message\": \"Failed to load log for user\"}");
-    }
+        }
     }
 }

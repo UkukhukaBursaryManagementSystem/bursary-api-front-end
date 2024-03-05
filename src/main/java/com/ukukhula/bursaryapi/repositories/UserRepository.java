@@ -25,49 +25,47 @@ public class UserRepository {
 
     public User getUserByEmail(String email) {
         String GET_USER_BY_EMAIL = "SELECT " +
-                    "[User].FirstName, " +
-                    "[User].LastName, " +
-                    "[User].IsUserActive," +
-                    "[User].ID, " +
-                    "Contact.Email, " +
-                    "[UserRole].[Role] " +
-                    "FROM " +
-                    "[User] " +
-                    "JOIN Contact ON [User].ContactID = Contact.ID " +
-                    "JOIN UserRole ON [User].[UserRoleID] = UserRole.ID " +
-                    "WHERE Contact.Email = ?";
+                "[User].FirstName, " +
+                "[User].LastName, " +
+                "[User].IsUserActive," +
+                "[User].ID, " +
+                "Contact.Email, " +
+                "[UserRole].[Role] " +
+                "FROM " +
+                "[User] " +
+                "JOIN Contact ON [User].ContactID = Contact.ID " +
+                "JOIN UserRole ON [User].[UserRoleID] = UserRole.ID " +
+                "WHERE Contact.Email = ?";
         return Optional.ofNullable(jdbcTemplate.queryForObject(GET_USER_BY_EMAIL, userRowMapper, email)).get();
     }
 
+    public Integer addHod(String firstName, String lastName, String phoneNumber, String email, String department,
+            String universityName)  {
+        String INSERT_INTO_REQUESTS = "{CALL [dbo].[InsertHODByAdmin] (?,?,?,?,?,?)}";
+        return jdbcTemplate.update(INSERT_INTO_REQUESTS, firstName, lastName, phoneNumber, email,
+                department, universityName);
 
-    public void addHod(HodDTO headOfDepartment) throws Exception{
-
-        SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate)
-                .withProcedureName("uspInsertHOD");
-        MapSqlParameterSource inParams = new MapSqlParameterSource()
-        .addValue("FirstName", headOfDepartment.getFirstName())
-        .addValue("LastName", headOfDepartment.getLastName())
-        .addValue("PhoneNumber", headOfDepartment.getPhoneNumber())
-        .addValue("Email", headOfDepartment.getEmail())
-        .addValue("DepartmentID", headOfDepartment.getDepartmentID())
-        .addValue("UniversityID", headOfDepartment.getUniversityID());
-
-        simpleJdbcCall.execute(inParams);
-        
     }
 
+    public Integer createRequest(String firstName, String lastName, String phoneNumber, String email, String department,
+            String universityName) {
+        String INSERT_INTO_REQUESTS = "{CALL InsertRequest (?,?,?,?,?,?)}";
+        return jdbcTemplate.update(INSERT_INTO_REQUESTS, firstName, lastName, phoneNumber, email,
+                department, universityName);
 
-    public void addAdmin(AdminDTO admin) throws Exception{
+    }
+
+    public void addAdmin(AdminDTO admin) throws Exception {
 
         SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate)
                 .withProcedureName("uspInsertAdmin");
         MapSqlParameterSource inParams = new MapSqlParameterSource()
-        .addValue("FirstName", admin.getFirstName())
-        .addValue("LastName", admin.getLastName())
-        .addValue("PhoneNumber", admin.getPhoneNumber())
-        .addValue("Email", admin.getEmail());
+                .addValue("FirstName", admin.getFirstName())
+                .addValue("LastName", admin.getLastName())
+                .addValue("PhoneNumber", admin.getPhoneNumber())
+                .addValue("Email", admin.getEmail());
         simpleJdbcCall.execute(inParams);
-        
+
     }
 
     public UserLogDTO addUserLog(UserLogDTO userLogDTO) {
@@ -81,14 +79,12 @@ public class UserRepository {
                 userLogDTO.getUserName(),
                 userLogDTO.getUserAccessToken());
 
-
         if (rowsAffected > 0) {
             return userLogDTO;
         } else {
             throw new RuntimeException("Error creating Request. No rows affected.");
         }
     }
-
 
     public Boolean doesUserExist(String email) {
         return null;
@@ -102,7 +98,7 @@ public class UserRepository {
             resultSet.getBoolean("IsUserActive"),
             resultSet.getInt("ID")));
 
-    private final RowMapper<UserLogDTO> userLogRowMapper = ((resultSet, rowNumber ) -> new UserLogDTO(
+    private final RowMapper<UserLogDTO> userLogRowMapper = ((resultSet, rowNumber) -> new UserLogDTO(
             resultSet.getInt("userId"),
             resultSet.getString("userName"),
             resultSet.getString("userAccessToken")));

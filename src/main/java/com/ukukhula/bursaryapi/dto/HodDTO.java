@@ -8,22 +8,21 @@ public class HodDTO {
     String LastName;
     String PhoneNumber;
     String Email;
-    int DepartmentID;
-    int UniversityID;
+    String department;
+    String universityName;
 
     public HodDTO(String firstName,
-                    String lastName,
-                    String phoneNumber,
-                    String email,
-                    int departmentID,
-                    int universityID)
-    {
+            String lastName,
+            String phoneNumber,
+            String email,
+            String department,
+            String universityName) {
         this.FirstName = firstName;
         this.LastName = lastName;
         this.PhoneNumber = phoneNumber;
         this.Email = email;
-        this.DepartmentID = departmentID;
-        this.UniversityID = universityID;
+        this.department = department;
+        this.universityName = universityName;
 
     }
 }

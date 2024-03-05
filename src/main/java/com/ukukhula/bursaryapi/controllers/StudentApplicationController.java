@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
+import com.ukukhula.bursaryapi.security.MsalValidationService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -35,18 +37,26 @@ import com.ukukhula.bursaryapi.exceptions.ApplicationInvalidStatusException;
 public class StudentApplicationController {
 
     private final StudentApplicationRepository studentApplicationRepository;
-
-    public StudentApplicationController(StudentApplicationRepository studentApplicationRepository) {
+    private final MsalValidationService msalValidationService;
+    public StudentApplicationController(StudentApplicationRepository studentApplicationRepository, MsalValidationService msalValidationService) {
         this.studentApplicationRepository = studentApplicationRepository;
+        this.msalValidationService = msalValidationService;
 
     }
 
     @GetMapping("/student/{studentId}")
-    public ResponseEntity<?> getStudentApplications(@PathVariable int studentId) {
+    public ResponseEntity<?> getStudentApplications(@PathVariable int studentId, HttpServletRequest req) {
+
+        String role = req.getHeader("userRole");
+        StudentApplication application = null;
+
         if (studentId <= 0) {
             return ResponseEntity.badRequest().body("Student ID is not provided");
         }
-        StudentApplication application = studentApplicationRepository.findByStudentID(studentId);
+
+        if (role == "hod" || role == "admin") {
+            application = studentApplicationRepository.findByStudentID(studentId);
+        }
         if (application == null) {
             return ResponseEntity.notFound().build();
         }

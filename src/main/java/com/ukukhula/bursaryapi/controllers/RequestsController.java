@@ -1,5 +1,7 @@
 package com.ukukhula.bursaryapi.controllers;
 
+import com.ukukhula.bursaryapi.security.MsalValidationService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -1,9 +1,12 @@
 package com.ukukhula.bursaryapi.controllers;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.ukukhula.bursaryapi.security.MsalValidationService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -16,33 +19,54 @@ import com.ukukhula.bursaryapi.repositories.StudentAllocationRepository;
 public class StudentAllocationController {
 
     private final StudentAllocationRepository studentAllocationRepository;
+    private final MsalValidationService msalValidationService;
 
-    public StudentAllocationController(StudentAllocationRepository studentAllocationRepository) {
+    public StudentAllocationController(StudentAllocationRepository studentAllocationRepository, MsalValidationService msalValidationService) {
         this.studentAllocationRepository = studentAllocationRepository;
+        this.msalValidationService = msalValidationService;
     }
 
     @GetMapping("/student/allocation")
-    public ResponseEntity<List<StudentAllocation>> getAllStudentAllocations() {
-        List<StudentAllocation> allocations = studentAllocationRepository.getAllStudentAllocations();
+    public ResponseEntity<List<StudentAllocation>> getAllStudentAllocations( HttpServletRequest req) {
+
+        List<StudentAllocation> allocations = new ArrayList<>();
+        if (req.getHeader("userRole").toLowerCase() == "hod") {
+            allocations = studentAllocationRepository.getAllStudentAllocations();
+        }
         return ResponseEntity.ok(allocations);
     }
 
     @GetMapping("student/allocation/{id}")
-    public ResponseEntity<StudentAllocation> getStudentAllocationById(@PathVariable int id) {
-        StudentAllocation allocation = studentAllocationRepository.getStudentAllocationById(id);
+    public ResponseEntity<StudentAllocation> getStudentAllocationById(@PathVariable int id, HttpServletRequest req) {
+
+        String role = req.getHeader("userRole");
+        StudentAllocation allocation = null;
+        if (role.toLowerCase() == "hod" || role.toLowerCase() == "admin") {
+            allocation = studentAllocationRepository.getStudentAllocationById(id);}
         return allocation != null ? ResponseEntity.ok(allocation) : ResponseEntity.notFound().build();
     }
 
     @PostMapping("/student/allocation")
-    public ResponseEntity<StudentAllocation> createStudentAllocation(@RequestBody StudentAllocation studentAllocation) {
-        StudentAllocation createdAllocation = studentAllocationRepository.createStudentAllocation(studentAllocation);
+    public ResponseEntity<StudentAllocation> createStudentAllocation(@RequestBody StudentAllocation studentAllocation, HttpServletRequest req) {
+
+        String role = req.getHeader("userRole");
+        StudentAllocation createdAllocation = null;
+        if (role.toLowerCase() == "hod" || role.toLowerCase() == "admin") {
+            createdAllocation = studentAllocationRepository.createStudentAllocation(studentAllocation);
+        }
         return ResponseEntity.ok(createdAllocation);
     }
 
     @PutMapping("/student/allocation/{id}")
     public ResponseEntity<StudentAllocation> updateStudentAllocation(
-            @PathVariable int id, @RequestBody StudentAllocation updatedAllocation) {
-        StudentAllocation result = studentAllocationRepository.updateStudentAllocation(id, updatedAllocation);
+            @PathVariable int id, @RequestBody StudentAllocation updatedAllocation, HttpServletRequest req) {
+
+        String role = req.getHeader("userRole");
+        StudentAllocation result = null;
+
+        if (role.equalsIgnoreCase("hod") || role.equalsIgnoreCase("admin")) {
+            result = studentAllocationRepository.updateStudentAllocation(id, updatedAllocation);
+        }
         return ResponseEntity.ok(result);
     }
 
